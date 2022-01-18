@@ -25,6 +25,7 @@ All documentation regarding the creation of such a file is available in the [use
 It is important to configure the directory structure correctly to ensure that the module interacts correctly with the data files. The repository, particularly the data folder, must be structured as follows. *The names of the folders and files can and probably will differ, but they must be consistent with the names written in the* `settings.py` *file.*
 
 ```
+THE DATA FOLDER NEEDS TO BE STRUCTURED AS FOLLOWS :
 |_📂 Project directory/
   |_📂 data/
     |_📄 metadata.json
@@ -55,9 +56,10 @@ If your data folder is currently structured as presented above, you can skip the
 
 ##### Structure your data directory (Optional)
 
-This module provides a way to structure you data directory as presented above, but this part of the code is not very flexible. In fact, the `data_structure_preprocessing.py` script will only work if your data directory structure is as follows. *Again, the names of the folders and files can and probably will differ, but they must be consistent with the names written in the* `settings.py` *file.*
+This module provides a way to structure you data directory as presented above, but this part of the code is not very flexible. In fact, the `structure_data_folder.py` script will only work if your data directory structure is as follows. *Again, the names of the folders and files can and probably will differ, but they must be consistent with the names written in the* `settings.py` *file.*
 
 ```
+IF THE DATA FOLDER IS STRUCTURED AS FOLLOWS, THE structure_data_folder.py SCRIPT CAN BE USED TO REARRANGE THE FOLDER STRUCTURE.
 |_📂 Project directory/
   |_📂 data/
     |_📄 metadata.json
