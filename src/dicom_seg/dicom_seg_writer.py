@@ -1,0 +1,215 @@
+"""
+    @file:              dicom_seg_writer.py
+    @Author:            Maxence Larose
+
+    @Creation Date:     01/2022
+    @Last modification: 01/2022
+
+    @Description:       This file contains the DicomSEGWriter which is to create DICOM SEG files from segmentations
+                        files in the research data file formats (such as NRRD, NIfTI, etc.).
+"""
+
+import pathlib
+import os
+from typing import List, NamedTuple, Set
+
+import pydicom
+import pydicom_seg
+import SimpleITK as sitk
+
+from src.utils import get_dicom_header
+
+
+class DicomSEGWriter:
+
+    class SeriesData(NamedTuple):
+        """
+        Series description namedtuple to simplify management of values.
+        """
+        series_description: str
+        paths_to_dicoms_from_series: List[str]
+        dicom_header: pydicom.dataset.FileDataset
+
+    def __init__(
+            self,
+            path_to_dicom_folder: str,
+            path_to_segmentations_folder: str,
+            path_to_metadata_json: str
+    ):
+        """
+        Constructor of the class DicomSEGWriter.
+
+        Parameters
+        ----------
+        path_to_dicom_folder : str
+            Path to the folder containing the patient dicom files.
+        path_to_segmentations_folder : str
+            Path to the folder containing the patient segmentation files in the research data file formats (such as
+            NRRD, NIfTI, etc.).
+        path_to_metadata_json : str
+            In order to do the conversion, we need to pass extra metadata that describe the segmentations to the
+            converter. See https://qiicr.gitbook.io/dcmqi-guide/use-cases/freesurfer.
+        """
+        self._path_to_dicom_folder = path_to_dicom_folder
+        self._path_to_segmentations_folder = path_to_segmentations_folder
+        self._path_to_metadata_json = path_to_metadata_json
+
+    @property
+    def _paths_to_segmentations(self) -> List[str]:
+        """
+        Paths to segmentations.
+
+        Returns
+        -------
+        paths_to_segmentations : List[str]
+            A list of paths to the segmentation files.
+        """
+        path_to_segmentations = []
+        for path in os.listdir(self._path_to_segmentations_folder):
+            path_to_segmentations.append(os.path.join(self._path_to_segmentations_folder, path))
+        return path_to_segmentations
+
+    @property
+    def __series_ids(self) -> List[str]:
+        """
+        Get all series IDs from a patient's dicom folder.
+
+        Returns
+        -------
+        series_ids : List[str]
+            All series IDs contained in a patient folder.
+        """
+        series_reader = sitk.ImageSeriesReader()
+        series_ids = series_reader.GetGDCMSeriesIDs(self._path_to_dicom_folder)
+
+        if not series_ids:
+            raise FileNotFoundError(f"Given directory {self._path_to_dicom_folder} does not contain a DICOM series.")
+
+        return series_ids
+
+    @property
+    def __series_data_list(self) -> List[SeriesData]:
+        """
+        Get the series data from series IDs and the path to the patient's dicom folder.
+
+        Returns
+        -------
+        series_data_list : List[DicomSEGWriter.SeriesData]
+            List of the data from the selected series.
+        """
+        series_data_list: List[DicomSEGWriter.SeriesData] = []
+        all_patient_names: Set[str] = set()
+        for idx, series_id in enumerate(self.__series_ids):
+            series_reader = sitk.ImageSeriesReader()
+            paths_to_dicoms_from_series = series_reader.GetGDCMSeriesFileNames(self._path_to_dicom_folder, series_id)
+
+            path_to_first_dicom_of_series = paths_to_dicoms_from_series[0]
+            loaded_dicom_header = get_dicom_header(path_to_dicom=path_to_first_dicom_of_series)
+            all_patient_names.add(loaded_dicom_header.PatientName)
+
+            series_data = self.SeriesData(
+                series_description=loaded_dicom_header.SeriesDescription,
+                paths_to_dicoms_from_series=paths_to_dicoms_from_series,
+                dicom_header=loaded_dicom_header
+            )
+            series_data_list.append(series_data)
+
+        if len(all_patient_names) != 1:
+            raise AssertionError(f"All dicom files in the same folder must belong to the same patient. This is not the "
+                                 f"case for the patient whose data is currently being downloaded since the names "
+                                 f"{all_patient_names} are found in his or her folder.")
+
+        return series_data_list
+
+    @property
+    def _template(self) -> pydicom.Dataset:
+        """
+        Template for the converter metadata.
+
+        Returns
+        -------
+        template : pydicom.Dataset
+            Metadata template.
+        """
+        return pydicom_seg.template.from_dcmqi_metainfo(self._path_to_metadata_json)
+
+    @staticmethod
+    def _display_series_list(series_data_list: List[SeriesData]) -> None:
+        """
+        Print the patient's name and its series descriptions (and index).
+        """
+        print(f"{'-'*50}\nPatient name : {series_data_list[0].dicom_header.PatientName}")
+        for series_idx, series_data in enumerate(series_data_list):
+            print(f"Series index: {series_idx}, Series Description: {series_data.series_description}")
+
+    def get_dicom_series_paths_for_given_segmentation(self, path_to_segmentation: str) -> List[str]:
+        """
+        Print the patient's name and its series descriptions (and index).
+
+        Parameters
+        ----------
+        path_to_segmentation : str
+            Path to a segmentation file.
+
+        Returns
+        -------
+        paths_to_dicoms_from_series : List[str]
+            List of paths to the DICOMs from the chosen series.
+        """
+        segmentation_filename = os.path.basename(path_to_segmentation)
+        series_data_list = self.__series_data_list
+
+        self._display_series_list(series_data_list=series_data_list)
+        series_idx = input(f"Which of the above series contains the source images for the segmentation named "
+                           f"{segmentation_filename}? \nPlease enter the reference series index here:")
+
+        chosen_series = series_data_list[int(series_idx)]
+
+        return chosen_series.paths_to_dicoms_from_series
+
+    @staticmethod
+    def get_sitk_label_map_for_give_segmentation(path_to_segmentation: str) -> sitk.Image:
+        """
+        Get the SimpleITK Image from a path to a segmentation.
+
+        Parameters
+        ----------
+        path_to_segmentation : str
+            Path to a segmentation file.
+
+        Returns
+        -------
+        image : sitk.Image
+            Segmentation ITK image.
+        """
+        file_reader = sitk.ImageFileReader()
+        file_reader.SetFileName(fn=path_to_segmentation)
+        return file_reader.Execute()
+
+    def write(self, **kwargs):
+        """
+        Write DICOM SEG files using the segmentation files associated to their source DICOM images.
+
+        Parameters
+        ----------
+        kwargs : dict
+            inplane_cropping : bool, default = False
+            skip_empty_slices : bool, default = False
+            skip_missing_segment : bool, default = False
+        """
+        writer = pydicom_seg.MultiClassWriter(
+            template=self._template,
+            inplane_cropping=kwargs.get("inplane_cropping", False),
+            skip_empty_slices=kwargs.get("skip_empty_slices", False),
+            skip_missing_segment=kwargs.get("skip_missing_segment", False)
+        )
+
+        for path_to_seg in self._paths_to_segmentations:
+            source_images = self.get_dicom_series_paths_for_given_segmentation(path_to_seg)
+            segmentation = self.get_sitk_label_map_for_give_segmentation(path_to_seg)
+            dcm = writer.write(segmentation, source_images)
+
+            new_path = f"{os.path.join(self._path_to_dicom_folder, pathlib.Path(path_to_seg).stem)}.SEG.dcm"
+            dcm.save_as(new_path)
+
+            print(f"DICOM SEG file saved with path {new_path}.\n")

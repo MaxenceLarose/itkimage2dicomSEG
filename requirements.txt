@@ -1,0 +1,9 @@
+attrs==21.4.0
+idna==3.3
+jsonschema==3.2.0
+numpy==1.22.1
+pydicom==2.2.2
+pydicom-seg==0.4.0
+pyrsistent==0.18.1
+SimpleITK==2.1.1
+six==1.16.0
