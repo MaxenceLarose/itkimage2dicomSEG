@@ -51,7 +51,7 @@ It is important to configure the directory structure correctly to ensure that th
   |_📄 ...
 ```
 
-If your data folder is currently structured as presented above, you can skip the [Structure your data directory](#structure-your-data-directory-(optional)) section below and go directly to [File names](#file-names) section. 
+If your data folder is currently structured as presented above, you can skip the [Structure your data directory](#structure-your-data-directory-optional) section below and go directly to [File names](#file-names) section. 
 
 ##### Structure your data directory (Optional)
 
