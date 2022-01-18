@@ -1,1 +1,1 @@
-# itkimage2segimage
+# itkimage2dicomseg
