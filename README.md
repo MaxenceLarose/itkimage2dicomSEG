@@ -12,6 +12,12 @@ A known limitation of the [pydicom-seg](https://pypi.org/project/pydicom-seg/) l
 
 ## Getting started
 
+### Create a JSON parameter file
+
+A JSON parameter file is necessary so that the segmentation output is described in terms of standardized vocabularies such as [SNOMED](https://en.wikipedia.org/wiki/Systematized_Nomenclature_of_Medicine), and segmentation can be saved in DICOM format side by side and cross-referenced with the source image data. This can help remove ambiguity about the meaning of the results
+
+All documentation regarding the creation of such a file is available in the [user guide](https://qiicr.gitbook.io/dcmqi-guide/) for the [dcmqi](https://github.com/qiicr/dcmqi) (DICOM for Quantitative Imaging) library. They even provide a [web application](http://qiicr.org/dcmqi/#/seg) to populate the metadata JSON file.
+
 ### Organize your data
 
 #### Data Structure
