@@ -1,10 +1,10 @@
-# ITK images to DICOM-SEG files converter
+# ITK images to DICOM-SEG files conversion pipeline
 
 Simplify the conversion of segmentation in commonly used research file formats like NRRD and NIfTI into the standardized  [DICOM-SEG](https://dicom.nema.org/medical/dicom/current/output/chtml/part03/sect_C.8.20.html) format. 
 
 ## Motivation
 
-The **purpose** of this project is to provide the necessary tools to manage paths and references during the conversion of a segmentation in a research file format (`.nrrd`, `.nii`, etc.) to a DICOM-SEG file.  The main goal is accomplished by using the [pydicom-seg](https://pypi.org/project/pydicom-seg/) library to create the DICOM-SEG files.
+The **purpose** of this project is to provide a pipeline that contains the necessary tools to manage paths and references during the conversion of a segmentation in a research file format (`.nrrd`, `.nii`, etc.) to a DICOM-SEG file.  The main goal is accomplished by using the [pydicom-seg](https://pypi.org/project/pydicom-seg/) library to create the DICOM-SEG files.
 
 ## Limitations
 
