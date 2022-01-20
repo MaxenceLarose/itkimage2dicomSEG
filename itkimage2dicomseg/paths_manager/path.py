@@ -12,8 +12,8 @@ import logging
 import os
 from typing import Optional, List
 
-from src.paths_manager.segmentation_filename_patterns_matcher import SegmentationFilenamePatternsMatcher
-from src.utils import get_dicom_header
+from .segmentation_filename_patterns_matcher import SegmentationFilenamePatternsMatcher
+from ..utils import get_dicom_header
 
 
 class Path:

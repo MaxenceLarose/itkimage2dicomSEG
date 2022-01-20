@@ -14,7 +14,7 @@ from collections.abc import Generator
 import logging
 import os
 
-from src.paths_manager.path import Path
+from .path import Path
 
 
 class PathGenerator(Generator):
