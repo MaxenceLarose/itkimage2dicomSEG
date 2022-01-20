@@ -11,10 +11,11 @@
 """
 import logging
 
+from data_structure.structure import structure_data_folder
 from logging_tools import logs_file_setup
 from paths_manager.path_generator import PathGenerator
 from settings import *
-from utils import structure_data_folder
+
 
 if __name__ == "__main__":
     # ----------------------------------------------------------------------------------------------------------- #

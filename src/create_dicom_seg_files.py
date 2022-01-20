@@ -33,4 +33,4 @@ if __name__ == "__main__":
             path_to_metadata_json=PathName.PATH_TO_METADATA_JSON
         )
 
-        dicom_writer.write()
+        dicom_writer.write(delete_itk_segmentation_files=True)

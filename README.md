@@ -129,10 +129,10 @@ Here, we show the code available in the `structure_data_folder.py` script, which
 ```python
 import logging
 
+from data_structure.structure import structure_data_folder
 from logging_tools import logs_file_setup
 from paths_manager.path_generator import PathGenerator
 from settings import *
-from utils import structure_data_folder
 
 if __name__ == "__main__":
     logs_file_setup(logging.INFO)
@@ -176,7 +176,8 @@ if __name__ == "__main__":
             path_to_metadata_json=PathName.PATH_TO_METADATA_JSON
         )
 
-        dicom_writer.write()
+        dicom_writer.write(delete_itk_segmentation_files=False) # You might want to set the variable                                                                                             # delete_itk_segmentation_files to True if you want to delete
+                                                                # them.
 
 ```
 
@@ -187,9 +188,9 @@ Here, we show the code available in the `destructure_data_folder.py` script, whi
 ```python
 import logging
 
+from src.data_structure.destructure import destructure_data_folder
 from logging_tools import logs_file_setup
 from settings import *
-from utils import destructure_data_folder
 
 if __name__ == "__main__":
     logs_file_setup(logging.INFO)

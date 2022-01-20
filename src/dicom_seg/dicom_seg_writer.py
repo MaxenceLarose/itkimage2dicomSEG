@@ -13,6 +13,7 @@ import pathlib
 import os
 from typing import List, NamedTuple, Set
 
+from grpm_uid import generate_uid
 import pydicom
 import pydicom_seg
 import SimpleITK as sitk
@@ -186,12 +187,14 @@ class DicomSEGWriter:
         file_reader.SetFileName(fn=path_to_segmentation)
         return file_reader.Execute()
 
-    def write(self, **kwargs):
+    def write(self, delete_itk_segmentation_files: bool = False, **kwargs):
         """
         Write DICOM SEG files using the segmentation files associated to their source DICOM images.
 
         Parameters
         ----------
+        delete_itk_segmentation_files : bool
+            Delete itk segmentation files after the DICOM-SEG segmentation files are created. USE WITH CAUTION!
         kwargs : dict
             inplane_cropping : bool, default = False
             skip_empty_slices : bool, default = False
@@ -207,9 +210,16 @@ class DicomSEGWriter:
         for path_to_seg in self._paths_to_segmentations:
             source_images = self.get_dicom_series_paths_for_given_segmentation(path_to_seg)
             segmentation = self.get_sitk_label_map_for_give_segmentation(path_to_seg)
+
             dcm = writer.write(segmentation, source_images)
 
-            new_path = f"{os.path.join(self._path_to_dicom_folder, pathlib.Path(path_to_seg).stem)}.SEG.dcm"
+            dcm.SOPInstanceUID = generate_uid()
+            dcm.SeriesInstanceUID = generate_uid()
+
+            new_path = f"{os.path.join(self._path_to_segmentations_folder, pathlib.Path(path_to_seg).stem)}.SEG.dcm"
             dcm.save_as(new_path)
+
+            if delete_itk_segmentation_files:
+                os.remove(path_to_seg)
 
             print(f"DICOM SEG file saved with path {new_path}.\n")
