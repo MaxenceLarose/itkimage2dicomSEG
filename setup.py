@@ -11,7 +11,7 @@ setup(
     description="Simplify the conversion of segmentation in commonly used research file formats like NRRD and NIfTI "
                 "into the standardized DICOM-SEG format. ",
     install_requires=[
-        "grpm-uid",
+        "grpm-uid @ git+https://gitlab.chudequebec.ca/gacou54/grpm_uid.git",
         "pydicom",
         "pydicom-seg",
     ]
