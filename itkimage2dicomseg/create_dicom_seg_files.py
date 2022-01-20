@@ -11,9 +11,9 @@
 import logging
 import os
 
-from logging_tools import logs_file_setup
-from settings import *
-from src.dicom_seg.dicom_seg_writer import DicomSEGWriter
+from .logging_tools import logs_file_setup
+from .settings import *
+from .dicom_seg.dicom_seg_writer import DicomSEGWriter
 
 if __name__ == "__main__":
     # ----------------------------------------------------------------------------------------------------------- #

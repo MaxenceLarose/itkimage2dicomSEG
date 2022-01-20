@@ -13,7 +13,7 @@
 import os
 import shutil
 
-from src.paths_manager.path_generator import PathGenerator
+from ..paths_manager.path_generator import PathGenerator
 
 
 def structure_data_folder(

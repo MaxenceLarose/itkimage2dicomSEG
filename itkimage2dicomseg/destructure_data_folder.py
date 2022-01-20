@@ -10,9 +10,9 @@
 """
 import logging
 
-from src.data_structure.destructure import destructure_data_folder
-from logging_tools import logs_file_setup
-from settings import *
+from .data_structure.destructure import destructure_data_folder
+from .logging_tools import logs_file_setup
+from .settings import *
 
 if __name__ == "__main__":
     # ----------------------------------------------------------------------------------------------------------- #

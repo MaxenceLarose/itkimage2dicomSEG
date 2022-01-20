@@ -18,7 +18,7 @@ import pydicom
 import pydicom_seg
 import SimpleITK as sitk
 
-from src.utils import get_dicom_header
+from ..utils import get_dicom_header
 
 
 class DicomSEGWriter:
