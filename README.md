@@ -6,6 +6,20 @@ Simplify the conversion of segmentation in commonly used research file formats l
 
 The **purpose** of this project is to provide a pipeline that contains the necessary tools to manage paths and references during the conversion of a segmentation in a research file format (`.nrrd`, `.nii`, etc.) to a DICOM-SEG file.  The main goal is accomplished by using the [pydicom-seg](https://pypi.org/project/pydicom-seg/) library to create the DICOM-SEG files.
 
+## Installation
+
+### From GitHub :
+
+```
+pip install git+https://github.com/MaxenceLarose/itkimage2dicomSEG.git
+```
+
+### From GitLab
+
+```
+pip install git+https://gitlab.chudequebec.ca/MaxenceLarose/itkimage2dicomseg.git
+```
+
 ## Limitations
 
 A known limitation of the [pydicom-seg](https://pypi.org/project/pydicom-seg/) library is that it can only write multi-class segmentation, which means overlapping segments are not allowed.
@@ -106,7 +120,7 @@ class FileName:
 class FolderName:
     DATA_FOLDER: str = "data"
     PATIENTS_FOLDER: str = "Patients"
-    SEGMENTATIONS_FOLDER: str = "Segmentations"  # This folder name is only necessary if you need to restructure your data 														 #  folder, and therefore, use the function structure_data_folder().
+    SEGMENTATIONS_FOLDER: str = "Segmentations"  # This folder name is only necessary if you need to restructure your data folder, and therefore, use the function structure_data_folder().
     PATIENT_IMAGES_FOLDER: str = "images"
     PATIENT_SEGMENTATIONS_FOLDER: str = "segmentations"
 
@@ -176,8 +190,7 @@ if __name__ == "__main__":
             path_to_metadata_json=PathName.PATH_TO_METADATA_JSON
         )
 
-        dicom_writer.write(delete_itk_segmentation_files=False) # You might want to set the variable                                                                                             # delete_itk_segmentation_files to True if you want to delete
-                                                                # them.
+        dicom_writer.write(delete_itk_segmentation_files=False) # You might want to set the variable delete_itk_segmentation_files to True if you want to delete the segmentations.
 
 ```
 
