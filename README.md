@@ -63,7 +63,8 @@ THE DATA FOLDER NEEDS TO BE STRUCTURED AS FOLLOWS :
       |_📂 ...
   |_📄 settings.py
   |_📄 create_dicom_seg_files.py
-  |_📄 ...
+  |_📄 structure_data_folder.py
+  |_📄 destructure_data_folder.py
 ```
 
 If your data folder is currently structured as presented above, you can skip the [Structure your data directory](#structure-your-data-directory-optional) section below and go directly to [File names](#file-names) section. 
@@ -143,9 +144,9 @@ Here, we show the code available in the `structure_data_folder.py` script, which
 ```python
 import logging
 
-from data_structure.structure import structure_data_folder
-from logging_tools import logs_file_setup
-from paths_manager.path_generator import PathGenerator
+from itkimage2dicomseg import structure_data_folder, PathGenerator
+from itkimage2dicomseg.logging_tools import logs_file_setup
+
 from settings import *
 
 if __name__ == "__main__":
@@ -174,9 +175,10 @@ Here, we show the code available in the `create_dicom_seg_files.py` script, whic
 import logging
 import os
 
-from logging_tools import logs_file_setup
+from itkimage2dicomseg import DicomSEGWriter
+from itkimage2dicomseg.logging_tools import logs_file_setup
+
 from settings import *
-from src.dicom_seg.dicom_seg_writer import DicomSEGWriter
 
 if __name__ == "__main__":
     logs_file_setup(logging.INFO)
@@ -201,8 +203,9 @@ Here, we show the code available in the `destructure_data_folder.py` script, whi
 ```python
 import logging
 
-from src.data_structure.destructure import destructure_data_folder
-from logging_tools import logs_file_setup
+from itkimage2dicomseg import destructure_data_folder
+from itkimage2dicomseg.logging_tools import logs_file_setup
+
 from settings import *
 
 if __name__ == "__main__":
