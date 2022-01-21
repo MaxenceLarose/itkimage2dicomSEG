@@ -14,7 +14,7 @@ The **purpose** of this project is to provide a pipeline that contains the neces
 pip install git+https://github.com/MaxenceLarose/itkimage2dicomSEG.git
 ```
 
-### From GitLab
+### From GitLab :
 
 ```
 pip install git+https://gitlab.chudequebec.ca/MaxenceLarose/itkimage2dicomseg.git
