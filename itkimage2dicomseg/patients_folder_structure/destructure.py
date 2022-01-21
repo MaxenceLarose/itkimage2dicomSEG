@@ -14,7 +14,7 @@ import os
 import shutil
 
 
-def destructure_data_folder(
+def destructure_patients_folder(
         path_to_patients_folder: str,
         patient_images_folder_name: str,
         patient_segmentations_folder_name: str,

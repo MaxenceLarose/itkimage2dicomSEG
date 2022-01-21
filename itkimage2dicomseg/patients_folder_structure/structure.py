@@ -16,7 +16,7 @@ import shutil
 from ..paths_manager.path_generator import PathGenerator
 
 
-def structure_data_folder(
+def structure_patients_folder(
         path_generator: PathGenerator,
         patient_images_folder_name: str,
         patient_segmentations_folder_name: str

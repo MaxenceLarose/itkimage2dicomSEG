@@ -36,10 +36,10 @@ All documentation regarding the creation of such a file is available in the [use
 
 #### Data Structure
 
-It is important to configure the directory structure correctly to ensure that the module interacts correctly with the data files. The repository, particularly the data folder, must be structured as follows. *The names of the folders and files can and probably will differ, but they must be consistent with the names written in the* `settings.py` *file.*
+It is important to configure the directory structure correctly to ensure that the module interacts correctly with the data files. The repository, particularly the `Patients` folder, must be structured as follows. *The names of the folders and files can and probably will differ, but they must be consistent with the names written in the* `settings.py` *file.*
 
 ```
-THE DATA FOLDER NEEDS TO BE STRUCTURED AS FOLLOWS :
+THE PROJECT FOLDER NEEDS TO BE STRUCTURED AS FOLLOWS :
 |_📂 Project directory/
   |_📂 data/
     |_📄 metadata.json
@@ -67,14 +67,14 @@ THE DATA FOLDER NEEDS TO BE STRUCTURED AS FOLLOWS :
   |_📄 destructure_data_folder.py
 ```
 
-If your data folder is currently structured as presented above, you can skip the [Structure your data directory](#structure-your-data-directory-optional) section below and go directly to [File names](#file-names) section. 
+If your `Patients` folder is currently structured as presented above, you can skip the [Structure your patients directory](#structure-your-patients-directory-optional) section below and go directly to [File names](#file-names) section. 
 
-##### Structure your data directory (Optional)
+##### Structure your patients directory (Optional)
 
-This module provides a way to structure you data directory as presented above, but this part of the code is not very flexible. In fact, the `structure_data_folder.py` script will only work if your data directory structure is as follows. *Again, the names of the folders and files can and probably will differ, but they must be consistent with the names written in the* `settings.py` *file.*
+This module provides a way to structure you data directory as presented above, but this part of the code is not very flexible. In fact, the `structure_patients_folder.py` script will only work if your data directory structure is as follows. *Again, the names of the folders and files can and probably will differ, but they must be consistent with the names written in the* `settings.py` *file.*
 
 ```
-IF THE DATA FOLDER IS STRUCTURED AS FOLLOWS, THE structure_data_folder.py SCRIPT CAN BE USED TO REARRANGE THE FOLDER STRUCTURE.
+IF THE PROJECT FOLDER IS STRUCTURED AS FOLLOWS, THE structure_patients_folder.py SCRIPT CAN BE USED TO REARRANGE THE FOLDER STRUCTURE.
 |_📂 Project directory/
   |_📂 data/
     |_📄 metadata.json
@@ -104,7 +104,7 @@ Here, there is **1 rule** to follow when naming segmentation files. In fact, a s
 
 #### File names
 
-It is good practice to create a class that lists the various names and important paths of the folders that contain the data. I propose here a way to organize this class. This allows the user to have an overview of the parameters to be defined and it will also simplify the explanations in the next section on the structure of the data file. 
+It is good practice to create a class that lists the various names and important paths of the folders that contain the data. I propose here a way to organize this class. 
 
 To do this, it is first necessary to populate the file named `settings.py` which contains the important  `FileName` ,`FolderName` and `PathName` classes.  The `settings.py` file must be placed in the same folder as the `data` folder. It is easier to understand this step with an example so here is the expected content of `settings.py `. *The names of the folders and files can differ.*
 
@@ -144,7 +144,7 @@ Here, we show the code available in the `structure_data_folder.py` script, which
 ```python
 import logging
 
-from itkimage2dicomseg import structure_data_folder, PathGenerator
+from itkimage2dicomseg import structure_patients_folder, PathGenerator
 from itkimage2dicomseg.logging_tools import logs_file_setup
 
 from settings import *
@@ -159,7 +159,7 @@ if __name__ == "__main__":
         patient_number_prefix="Patient"
     )
 
-    structure_data_folder(
+    structure_patients_folder(
         path_generator=path_generator,
         patient_images_folder_name=FolderName.PATIENT_IMAGES_FOLDER,
         patient_segmentations_folder_name=FolderName.PATIENT_SEGMENTATIONS_FOLDER
@@ -203,7 +203,7 @@ Here, we show the code available in the `destructure_data_folder.py` script, whi
 ```python
 import logging
 
-from itkimage2dicomseg import destructure_data_folder
+from itkimage2dicomseg import destructure_patients_folder
 from itkimage2dicomseg.logging_tools import logs_file_setup
 
 from settings import *
@@ -211,7 +211,7 @@ from settings import *
 if __name__ == "__main__":
     logs_file_setup(logging.INFO)
 
-    destructure_data_folder(
+    destructure_patients_folder(
         path_to_patients_folder=PathName.PATH_TO_PATIENTS_FOLDER,
         patient_images_folder_name=FolderName.PATIENT_IMAGES_FOLDER,
         patient_segmentations_folder_name=FolderName.PATIENT_SEGMENTATIONS_FOLDER

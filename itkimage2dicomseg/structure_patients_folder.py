@@ -11,7 +11,7 @@
 """
 import logging
 
-from .data_structure.structure import structure_data_folder
+from .patients_folder_structure.structure import structure_patients_folder
 from .logging_tools import logs_file_setup
 from .paths_manager.path_generator import PathGenerator
 from .settings import *
@@ -36,7 +36,7 @@ if __name__ == "__main__":
     # ----------------------------------------------------------------------------------------------------------- #
     #            Copy segmentation files to corresponding patient folder and rearrange file structure             #
     # ----------------------------------------------------------------------------------------------------------- #
-    structure_data_folder(
+    structure_patients_folder(
         path_generator=path_generator,
         patient_images_folder_name=FolderName.PATIENT_IMAGES_FOLDER,
         patient_segmentations_folder_name=FolderName.PATIENT_SEGMENTATIONS_FOLDER

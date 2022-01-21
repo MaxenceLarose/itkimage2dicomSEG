@@ -10,7 +10,7 @@
 """
 import logging
 
-from .data_structure.destructure import destructure_data_folder
+from .patients_folder_structure.destructure import destructure_patients_folder
 from .logging_tools import logs_file_setup
 from .settings import *
 
@@ -23,7 +23,7 @@ if __name__ == "__main__":
     # ----------------------------------------------------------------------------------------------------------- #
     #                                           Destructure folder                                                #
     # ----------------------------------------------------------------------------------------------------------- #
-    destructure_data_folder(
+    destructure_patients_folder(
         path_to_patients_folder=PathName.PATH_TO_PATIENTS_FOLDER,
         patient_images_folder_name=FolderName.PATIENT_IMAGES_FOLDER,
         patient_segmentations_folder_name=FolderName.PATIENT_SEGMENTATIONS_FOLDER

@@ -169,7 +169,7 @@ class DicomSEGWriter:
         return chosen_series.paths_to_dicoms_from_series
 
     @staticmethod
-    def get_sitk_label_map_for_give_segmentation(path_to_segmentation: str) -> sitk.Image:
+    def get_sitk_label_map_for_given_segmentation(path_to_segmentation: str) -> sitk.Image:
         """
         Get the SimpleITK Image from a path to a segmentation.
 
@@ -209,7 +209,7 @@ class DicomSEGWriter:
 
         for path_to_seg in self._paths_to_segmentations:
             source_images = self.get_dicom_series_paths_for_given_segmentation(path_to_seg)
-            segmentation = self.get_sitk_label_map_for_give_segmentation(path_to_seg)
+            segmentation = self.get_sitk_label_map_for_given_segmentation(path_to_seg)
 
             dcm = writer.write(segmentation, source_images)
 
