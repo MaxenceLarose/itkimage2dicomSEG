@@ -92,7 +92,7 @@ class SegmentationFilenamePatternsMatcher:
         return patient_number
 
     @property
-    def patterns(self) -> List[str]:
+    def pattern(self) -> str:
         """
         Pattern in the filename.
 
@@ -101,7 +101,7 @@ class SegmentationFilenamePatternsMatcher:
         pattern : str
             Pattern.
         """
-        return [f"{self.patient_number_prefix}{str(self.patient_number)}"]
+        return f"{self.patient_number_prefix}{str(self.patient_number)}"
 
     @property
     def paths_to_segmentation_files(self) -> List[str]:
@@ -129,10 +129,16 @@ class SegmentationFilenamePatternsMatcher:
             paths_to_segmentation_files).
         """
         matches = [False] * len(self.paths_to_segmentation_files)
+        pattern = self.pattern
 
         for path_idx, path_to_segmentation_file in enumerate(self.paths_to_segmentation_files):
-            if all(pattern in path_to_segmentation_file for pattern in self.patterns):
-                matches[path_idx] = True
+            if pattern in path_to_segmentation_file:
+                pattern_start_idx = path_to_segmentation_file.find(pattern)
+                idx_following_pattern = pattern_start_idx + int(len(pattern))
+                character_following_pattern = path_to_segmentation_file[idx_following_pattern]
+
+                if not character_following_pattern.isdigit():
+                    matches[path_idx] = True
 
         return matches
 

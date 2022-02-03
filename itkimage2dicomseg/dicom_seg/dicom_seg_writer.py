@@ -169,6 +169,30 @@ class DicomSEGWriter:
         return chosen_series.paths_to_dicoms_from_series
 
     @staticmethod
+    def __get_3d_sitk_image_from_dicom_series(
+            paths_to_dicoms_from_series: List[str],
+    ) -> sitk.Image:
+        """
+        Get a 3D image array from a list of dicom paths associated to the same series.
+
+        Parameters
+        ----------
+        paths_to_dicoms_from_series : List[str]
+            List of paths to the DICOMs from the chosen series.
+
+        Returns
+        -------
+        image : sitk.Image
+            3D SimpleITK image obtained from the series.
+        """
+        series_reader = sitk.ImageSeriesReader()
+        series_reader.SetFileNames(paths_to_dicoms_from_series)
+
+        image = series_reader.Execute()
+
+        return image
+
+    @staticmethod
     def get_sitk_label_map_for_given_segmentation(path_to_segmentation: str) -> sitk.Image:
         """
         Get the SimpleITK Image from a path to a segmentation.
@@ -187,12 +211,50 @@ class DicomSEGWriter:
         file_reader.SetFileName(fn=path_to_segmentation)
         return file_reader.Execute()
 
-    def write(self, delete_itk_segmentation_files: bool = False, **kwargs):
+    @staticmethod
+    def _resample_mask(
+            mask: sitk.Image,
+            image: sitk.Image
+    ) -> sitk.Image:
+        """
+        Resample an itk_image to new out_spacing.
+
+        Parameters
+        ----------
+        mask : sitk.Image
+            The input mask.
+        image : sitk.Image
+            The source image.
+
+        Returns
+        -------
+        resampled_mask : sitk.Image
+            The resampled mask.
+        """
+        resampled_mask = sitk.Resample(
+            image1=mask,
+            referenceImage=image,
+            transform=sitk.Transform(),
+            interpolator=sitk.sitkNearestNeighbor,
+            defaultPixelValue=0,
+            outputPixelType=mask.GetPixelID()
+        )
+
+        return resampled_mask
+
+    def write(
+            self,
+            resample_segmentation_to_source_image_size: bool = False,
+            delete_itk_segmentation_files: bool = False,
+            **kwargs
+    ):
         """
         Write DICOM SEG files using the segmentation files associated to their source DICOM images.
 
         Parameters
         ----------
+        resample_segmentation_to_source_image_size : bool
+            Whether or not to resample mask to source image size.
         delete_itk_segmentation_files : bool
             Delete itk segmentation files after the DICOM-SEG segmentation files are created. USE WITH CAUTION!
         kwargs : dict
@@ -210,6 +272,10 @@ class DicomSEGWriter:
         for path_to_seg in self._paths_to_segmentations:
             source_images = self.get_dicom_series_paths_for_given_segmentation(path_to_seg)
             segmentation = self.get_sitk_label_map_for_given_segmentation(path_to_seg)
+
+            if resample_segmentation_to_source_image_size:
+                image = self.__get_3d_sitk_image_from_dicom_series(paths_to_dicoms_from_series=source_images)
+                segmentation = self._resample_mask(mask=segmentation, image=image)
 
             dcm = writer.write(segmentation, source_images)
 

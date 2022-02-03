@@ -33,4 +33,4 @@ if __name__ == "__main__":
             path_to_metadata_json=PathName.PATH_TO_METADATA_JSON
         )
 
-        dicom_writer.write(delete_itk_segmentation_files=True)
+        dicom_writer.write(resample_segmentation_to_source_image_size=True, delete_itk_segmentation_files=True)

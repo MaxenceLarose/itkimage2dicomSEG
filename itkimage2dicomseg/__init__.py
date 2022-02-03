@@ -4,7 +4,7 @@ from .patients_folder_structure.structure import structure_patients_folder
 from .patients_folder_structure.destructure import destructure_patients_folder
 
 __author__ = "Maxence Larose"
-__version__ = "0.0.1"
+__version__ = "0.0.2"
 __copyright__ = "Copyright 2022, Maxence Larose"
 __credits__ = ["Maxence Larose"]
 __license__ = "GPL"

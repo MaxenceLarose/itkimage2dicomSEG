@@ -26,5 +26,6 @@ if __name__ == "__main__":
     destructure_patients_folder(
         path_to_patients_folder=PathName.PATH_TO_PATIENTS_FOLDER,
         patient_images_folder_name=FolderName.PATIENT_IMAGES_FOLDER,
-        patient_segmentations_folder_name=FolderName.PATIENT_SEGMENTATIONS_FOLDER
+        patient_segmentations_folder_name=FolderName.PATIENT_SEGMENTATIONS_FOLDER,
+        delete_segmentations=True
     )
