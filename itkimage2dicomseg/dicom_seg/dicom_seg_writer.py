@@ -167,10 +167,10 @@ class DicomSEGWriter:
                                    f"{segmentation_filename}? \nPlease enter the reference series index here:")
                 chosen_series = series_data_list[int(series_idx)]
             except IndexError as e:
-                print(f"{e}. Please enter a valid index. Try again.")
+                print(f"IndexError : {e}. Please enter a valid index. Try again.")
                 continue
             except ValueError as e:
-                print(f"{e}. Please enter an index (integer), not a name. Try again.")
+                print(f"ValueError : {e}. Please enter an index (integer), not a name. Try again.")
                 continue
             break
 
