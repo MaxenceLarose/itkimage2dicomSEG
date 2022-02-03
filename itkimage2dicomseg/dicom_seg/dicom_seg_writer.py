@@ -161,8 +161,17 @@ class DicomSEGWriter:
         series_data_list = self.__series_data_list
 
         self._display_series_list(series_data_list=series_data_list)
-        series_idx = input(f"Which of the above series contains the source images for the segmentation named "
-                           f"{segmentation_filename}? \nPlease enter the reference series index here:")
+        while True:
+            try:
+                series_idx = input(f"Which of the above series contains the source images for the segmentation named "
+                                   f"{segmentation_filename}? \nPlease enter the reference series index here:")
+            except IndexError as e:
+                print(f"{e}. Please enter a valid index. Try again.")
+                continue
+            except ValueError as e:
+                print(f"{e}. Please enter an index (integer), not a name. Try again.")
+                continue
+            break
 
         chosen_series = series_data_list[int(series_idx)]
 
