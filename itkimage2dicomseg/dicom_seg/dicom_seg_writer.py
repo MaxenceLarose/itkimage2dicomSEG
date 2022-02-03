@@ -165,6 +165,7 @@ class DicomSEGWriter:
             try:
                 series_idx = input(f"Which of the above series contains the source images for the segmentation named "
                                    f"{segmentation_filename}? \nPlease enter the reference series index here:")
+                chosen_series = series_data_list[int(series_idx)]
             except IndexError as e:
                 print(f"{e}. Please enter a valid index. Try again.")
                 continue
@@ -172,8 +173,6 @@ class DicomSEGWriter:
                 print(f"{e}. Please enter an index (integer), not a name. Try again.")
                 continue
             break
-
-        chosen_series = series_data_list[int(series_idx)]
 
         return chosen_series.paths_to_dicoms_from_series
 
