@@ -61,7 +61,6 @@ THE PROJECT FOLDER NEEDS TO BE STRUCTURED AS FOLLOWS :
        	  |_📄 seg1.nrrd
        	  |_📄 ...
       |_📂 ...
-  |_📄 settings.py
   |_📄 create_dicom_seg_files.py
   |_📄 structure_data_folder.py
   |_📄 destructure_data_folder.py
@@ -94,7 +93,6 @@ IF THE PROJECT FOLDER IS STRUCTURED AS FOLLOWS, THE structure_patients_folder.py
       |_📄 Patient2_CT.nrrd
       |_📄 Patient3_US.nrrd
       |_📄 ...
-  |_📄 settings.py
   |_📄 create_dicom_seg_files.py
   |_📄 data_structure_preprocessing.py
   |_📄 ...
