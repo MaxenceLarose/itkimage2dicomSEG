@@ -219,6 +219,10 @@ if __name__ == "__main__":
 
 ```
 
+### TODO
+
+- [ ] Add a default parameter named `enable_association_of_several_images_to_the_same_segmentation : bool = False` to the function `write`of the class `DicomWriter`. 
+
 ## Contact
 
 Maxence Larose, B. Ing., [maxence.larose.1@ulaval.ca](mailto:maxence.larose.1@ulaval.ca)
