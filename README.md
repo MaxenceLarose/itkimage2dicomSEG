@@ -36,7 +36,7 @@ All documentation regarding the creation of such a file is available in the [use
 
 #### Data Structure
 
-It is important to configure the directory structure correctly to ensure that the module interacts correctly with the data files. The repository, particularly the `Patients` folder, must be structured as follows. *The names of the folders and files can and probably will differ, but they must be consistent with the names written in the* `settings.py` *file.*
+It is important to configure the directory structure correctly to ensure that the module interacts correctly with the data files. The repository, particularly the `Patients` folder, must be structured as follows. *The names of the folders and files can and probably will differ, but they must be consistent with your own folders and files names.*
 
 ```
 THE PROJECT FOLDER NEEDS TO BE STRUCTURED AS FOLLOWS :
@@ -67,11 +67,11 @@ THE PROJECT FOLDER NEEDS TO BE STRUCTURED AS FOLLOWS :
   |_📄 destructure_data_folder.py
 ```
 
-If your `Patients` folder is currently structured as presented above, you can skip the [Structure your patients directory](#structure-your-patients-directory-optional) section below and go directly to [File names](#file-names) section. 
+If your `Patients` folder is currently structured as presented above, you can skip the [Structure your patients directory](#structure-your-patients-directory-optional) section below and go directly to [Use the code](#use-the-code) section. 
 
 ##### Structure your patients directory (Optional)
 
-This module provides a way to structure you data directory as presented above, but this part of the code is not very flexible. In fact, the `structure_patients_folder.py` script will only work if your data directory structure is as follows. *Again, the names of the folders and files can and probably will differ, but they must be consistent with the names written in the* `settings.py` *file.*
+This module provides a way to structure you data directory as presented above, but this part of the code is not very flexible. In fact, the `structure_patients_folder.py` script will only work if your data directory structure is as follows. *Again, the names of the folders and files can and probably will differ, but they must be consistent with your own folders and files names.*
 
 ```
 IF THE PROJECT FOLDER IS STRUCTURED AS FOLLOWS, THE structure_patients_folder.py SCRIPT CAN BE USED TO REARRANGE THE FOLDER STRUCTURE.
@@ -102,39 +102,6 @@ IF THE PROJECT FOLDER IS STRUCTURED AS FOLLOWS, THE structure_patients_folder.py
 
 Here, there is **1 rule** to follow when naming segmentation files. In fact, a strong assumption that is made is that the DICOM data have been previously anonymized. We therefore assume that each patient's name contains a **unique number**.  Segmentation file names must contain this number in order to be able to associate a segmentation with the corresponding patient. To make it easier to find this number in the name of the segmentation file, a word common to all segmentations should be defined and placed in front of the patient number in the name of the segmentation file.  An example of a **patient number prefix** is just the word `Patient`. 
 
-#### File names
-
-It is good practice to create a class that lists the various names and important paths of the folders that contain the data. I propose here a way to organize this class. 
-
-To do this, it is first necessary to populate the file named `settings.py` which contains the important  `FileName` ,`FolderName` and `PathName` classes.  The `settings.py` file must be placed in the same folder as the `data` folder. It is easier to understand this step with an example so here is the expected content of `settings.py `. *The names of the folders and files can differ.*
-
-```python
-from os.path import abspath, dirname, join
-
-ROOT = abspath(dirname(__file__))
-
-
-class FileName:
-    METADATA_JSON: str = "metadata.json"
-
-
-class FolderName:
-    DATA_FOLDER: str = "data"
-    PATIENTS_FOLDER: str = "Patients"
-    SEGMENTATIONS_FOLDER: str = "Segmentations"  # This folder name is only necessary if you need to restructure your data folder, and therefore, use the function structure_data_folder().
-    PATIENT_IMAGES_FOLDER: str = "images"
-    PATIENT_SEGMENTATIONS_FOLDER: str = "segmentations"
-
-
-class PathName:
-    PATH_TO_DATA_FOLDER: str = join(ROOT, FolderName.DATA_FOLDER)
-
-    PATH_TO_METADATA_JSON: str = join(PATH_TO_DATA_FOLDER, FileName.METADATA_JSON)
-    PATH_TO_PATIENTS_FOLDER: str = join(PATH_TO_DATA_FOLDER, FolderName.PATIENTS_FOLDER)
-    PATH_TO_SEGMENTATIONS_FOLDER: str = join(PATH_TO_DATA_FOLDER, FolderName.SEGMENTATIONS_FOLDER)
-
-```
-
 ### Use the code
 
 #### Step 1 : Structure your data folder ("Optional"... see [Organize your data](#organize-your-data))
@@ -147,22 +114,20 @@ import logging
 from itkimage2dicomseg import structure_patients_folder, PathGenerator
 from itkimage2dicomseg.logging_tools import logs_file_setup
 
-from settings import *
-
 if __name__ == "__main__":
     logs_file_setup(logging.INFO)
 
     path_generator = PathGenerator(
-        path_to_patients_folder=PathName.PATH_TO_PATIENTS_FOLDER,
-        path_to_segmentations_folder=PathName.PATH_TO_SEGMENTATIONS_FOLDER,
+        path_to_patients_folder="data/Patients",
+        path_to_segmentations_folder="data/Segmentations",
         verbose=True,
         patient_number_prefix="Patient"
     )
 
     structure_patients_folder(
         path_generator=path_generator,
-        patient_images_folder_name=FolderName.PATIENT_IMAGES_FOLDER,
-        patient_segmentations_folder_name=FolderName.PATIENT_SEGMENTATIONS_FOLDER
+        patient_images_folder_name="images",
+        patient_segmentations_folder_name="segmentations"
     )
 
 ```
@@ -178,18 +143,16 @@ import os
 from itkimage2dicomseg import DicomSEGWriter
 from itkimage2dicomseg.logging_tools import logs_file_setup
 
-from settings import *
-
 if __name__ == "__main__":
     logs_file_setup(logging.INFO)
 
-    for patient_folder in os.listdir(PathName.PATH_TO_PATIENTS_FOLDER):
-        path_to_patient_folder = os.path.join(PathName.PATH_TO_PATIENTS_FOLDER, patient_folder)
+    for patient_folder in os.listdir("data/Patients"):
+        path_to_patient_folder = os.path.join("data/Patients", patient_folder)
 
         dicom_writer = DicomSEGWriter(
-            path_to_dicom_folder=os.path.join(path_to_patient_folder, FolderName.PATIENT_IMAGES_FOLDER),
-            path_to_segmentations_folder=os.path.join(path_to_patient_folder, FolderName.PATIENT_SEGMENTATIONS_FOLDER),
-            path_to_metadata_json=PathName.PATH_TO_METADATA_JSON
+            path_to_dicom_folder=os.path.join(path_to_patient_folder, "images"),
+            path_to_segmentations_folder=os.path.join(path_to_patient_folder, "segmentations"),
+            path_to_metadata_json="data/metadata.json"
         )
 
         dicom_writer.write(delete_itk_segmentation_files=False) # You might want to set the variable delete_itk_segmentation_files to True if you want to delete the segmentations.
@@ -206,15 +169,13 @@ import logging
 from itkimage2dicomseg import destructure_patients_folder
 from itkimage2dicomseg.logging_tools import logs_file_setup
 
-from settings import *
-
 if __name__ == "__main__":
     logs_file_setup(logging.INFO)
 
     destructure_patients_folder(
-        path_to_patients_folder=PathName.PATH_TO_PATIENTS_FOLDER,
-        patient_images_folder_name=FolderName.PATIENT_IMAGES_FOLDER,
-        patient_segmentations_folder_name=FolderName.PATIENT_SEGMENTATIONS_FOLDER
+        path_to_patients_folder="data/Patients",
+        patient_images_folder_name="images",
+        patient_segmentations_folder_name="segmentations"
     )
 
 ```
