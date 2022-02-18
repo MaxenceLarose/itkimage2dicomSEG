@@ -89,7 +89,7 @@ IF THE PROJECT FOLDER IS STRUCTURED AS FOLLOWS, THE structure_patients_folder.py
       |_📂 ...
     |_📂 Segmentations/
       |_📄 Patient1_CT.seg.nrrd
-      |_📄 Patient1_TEP.nrrd
+      |_📄 Patient1_PET.nrrd
       |_📄 Patient2_CT.nrrd
       |_📄 Patient3_US.nrrd
       |_📄 ...
@@ -98,7 +98,7 @@ IF THE PROJECT FOLDER IS STRUCTURED AS FOLLOWS, THE structure_patients_folder.py
   |_📄 ...
 ```
 
-Here, there is **1 rule** to follow when naming segmentation files. In fact, a strong assumption that is made is that the DICOM data have been previously anonymized. We therefore assume that each patient's name contains a **unique number**.  Segmentation file names must contain this number in order to be able to associate a segmentation with the corresponding patient. To make it easier to find this number in the name of the segmentation file, a word common to all segmentations should be defined and placed in front of the patient number in the name of the segmentation file.  An example of a **patient number prefix** is just the word `Patient`. 
+Here, there is **1 rule** to follow when naming segmentation files. In fact, a strong assumption that is made is that the DICOM data have been previously anonymized. We therefore assume that the name of the segmentation files associated with the images of a certain patient contains the ID of that patient. 
 
 ### Use the code
 
@@ -118,8 +118,7 @@ if __name__ == "__main__":
     path_generator = PathGenerator(
         path_to_patients_folder="data/Patients",
         path_to_segmentations_folder="data/Segmentations",
-        verbose=True,
-        patient_number_prefix="Patient"
+        verbose=True
     )
 
     structure_patients_folder(

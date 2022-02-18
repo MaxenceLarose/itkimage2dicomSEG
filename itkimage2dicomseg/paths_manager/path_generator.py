@@ -27,8 +27,7 @@ class PathGenerator(Generator):
             self,
             path_to_patients_folder: str,
             path_to_segmentations_folder: str,
-            verbose: bool,
-            patient_number_prefix: str,
+            verbose: bool
     ):
         """
         Used to initialize the self.paths_to_patients_dicom_folder attribute.
@@ -41,8 +40,6 @@ class PathGenerator(Generator):
             Images folder name.
         verbose : bool
             True to log/print some information else False.
-        patient_number_prefix : str
-            Prefix of the patient number common to all segmentations.
         """
         paths_to_patients_dicom_folder = []
         for path_to_patient_folder in os.listdir(path_to_patients_folder):
@@ -51,7 +48,6 @@ class PathGenerator(Generator):
         self._paths_to_patients_dicom_folder = paths_to_patients_dicom_folder
 
         self._path_to_segmentations_folder = path_to_segmentations_folder
-        self._patient_number_prefix = patient_number_prefix
         self._verbose = verbose
         self.current_index = 0
 
@@ -90,8 +86,7 @@ class PathGenerator(Generator):
         path = Path(
             path_to_dicom_folder=path_to_dicom_folder,
             path_to_segmentations_folder=self._path_to_segmentations_folder,
-            verbose=self._verbose,
-            patient_number_prefix=self._patient_number_prefix
+            verbose=self._verbose
         )
 
         self.current_index += 1

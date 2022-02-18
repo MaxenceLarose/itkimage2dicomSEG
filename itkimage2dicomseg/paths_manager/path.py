@@ -25,8 +25,7 @@ class Path:
             self,
             path_to_dicom_folder: str,
             path_to_segmentations_folder: str,
-            verbose: bool,
-            patient_number_prefix: str,
+            verbose: bool
     ):
         """
         Used to initialize all the attributes.
@@ -39,12 +38,9 @@ class Path:
             Path to the folder containing the segmentation files.
         verbose : bool
             True to log/print some information else False.
-        patient_number_prefix : str
-            The patient number prefix used in the filename of all segmentations.
         """
         self._path_to_dicom_folder = path_to_dicom_folder
         self._path_to_segmentations_folder = path_to_segmentations_folder
-        self._patient_number_prefix = patient_number_prefix
         self._verbose = verbose
         self._set_paths_to_segmentations()
 
@@ -83,15 +79,14 @@ class Path:
         )
 
         dicom_header = get_dicom_header(path_to_dicom=path_to_first_dicom_in_folder)
-        patient_name = str(dicom_header.PatientName)
+        patient_id = str(dicom_header.PatientID)
 
         if self._verbose:
-            logging.info(patient_name)
+            logging.info(patient_id)
 
         segmentation_filename_patterns_matcher = SegmentationFilenamePatternsMatcher(
             path_to_segmentations_folder=self._path_to_segmentations_folder,
-            patient_name=patient_name,
-            patient_number_prefix=self._patient_number_prefix
+            patient_id=patient_id
         )
 
         self._paths_to_segmentations = segmentation_filename_patterns_matcher.get_absolute_paths_to_segmentation_files()

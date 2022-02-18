@@ -29,8 +29,7 @@ if __name__ == "__main__":
     path_generator = PathGenerator(
         path_to_patients_folder=PathName.PATH_TO_PATIENTS_FOLDER,
         path_to_segmentations_folder=PathName.PATH_TO_SEGMENTATIONS_FOLDER,
-        verbose=True,
-        patient_number_prefix="Ano"
+        verbose=True
     )
 
     # ----------------------------------------------------------------------------------------------------------- #

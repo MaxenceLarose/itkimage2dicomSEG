@@ -7,12 +7,10 @@
 
     @Description:       This file contains the SegmentationFilenamePatternsMatcher class whose main purpose is to obtain
                         a list of absolute paths to the segmentation files given the location of the folder containing
-                        all the segmentations, the patient name and the patient number prefix used in the name of
-                        segmentations file.
+                        all the segmentations and the patient ID.
 """
 
 import os
-import re
 from typing import List
 
 import numpy as np
@@ -28,8 +26,7 @@ class SegmentationFilenamePatternsMatcher:
     def __init__(
             self,
             path_to_segmentations_folder: str,
-            patient_name: str,
-            patient_number_prefix: str
+            patient_id: str
     ):
         """
         Used to initialize all the class' attributes.
@@ -38,70 +35,38 @@ class SegmentationFilenamePatternsMatcher:
         ----------
         path_to_segmentations_folder : str
             Path to the folder containing all segmentations.
-        patient_name : str
-            Patient name. Must contains the patient number.
-        patient_number_prefix : str
-            The patient number prefix used in the filename of all segmentations.
+        patient_id : str
+            Patient ID.
         """
         self.path_to_segmentations_folder = path_to_segmentations_folder
-        self.patient_name = patient_name
-        self.patient_number_prefix = patient_number_prefix
+        self.patient_id = patient_id
 
     @property
-    def patient_name(self) -> str:
+    def patient_id(self) -> str:
         """
-        Patient name.
+        Patient ID.
 
         Returns
         -------
-        patient_name : str
-            Patient name. Must contains the patient number.
+        patient_id : str
+            Patient ID.
         """
-        return self._patient_name
+        return self._patient_id
 
-    @patient_name.setter
-    def patient_name(
+    @patient_id.setter
+    def patient_id(
             self,
-            patient_name: str
+            patient_id: str
     ) -> None:
         """
         Set patient name.
 
         Parameters
         ----------
-        patient_name : str
-            Patient name. Must contains the patient number.
+        patient_id : str
+            Patient ID.
         """
-        assert any(char.isdigit() for char in patient_name), f"Patient names must contain a number. Given name is " \
-                                                             f"{patient_name}."
-
-        self._patient_name = patient_name
-
-    @property
-    def patient_number(self) -> int:
-        """
-        Get patient number from patient name.
-
-        Returns
-        -------
-        patient_number : int
-            Patient number.
-        """
-        patient_number = int(re.findall(pattern=r"\d+", string=self.patient_name)[-1])
-
-        return patient_number
-
-    @property
-    def pattern(self) -> str:
-        """
-        Pattern in the filename.
-
-        Returns
-        -------
-        pattern : str
-            Pattern.
-        """
-        return f"{self.patient_number_prefix}{str(self.patient_number)}"
+        self._patient_id = patient_id
 
     @property
     def paths_to_segmentation_files(self) -> List[str]:
@@ -119,7 +84,7 @@ class SegmentationFilenamePatternsMatcher:
     def matches(self) -> List[bool]:
         """
         Get a boolean list indicating whether or not the segmentation filenames match the pattern defined using the
-        patient number and the patient number prefix.
+        patient ID.
 
         Returns
         -------
@@ -129,7 +94,7 @@ class SegmentationFilenamePatternsMatcher:
             paths_to_segmentation_files).
         """
         matches = [False] * len(self.paths_to_segmentation_files)
-        pattern = self.pattern
+        pattern = self.patient_id
 
         for path_idx, path_to_segmentation_file in enumerate(self.paths_to_segmentation_files):
             if pattern in path_to_segmentation_file:
