@@ -46,19 +46,20 @@ THE PROJECT FOLDER NEEDS TO BE STRUCTURED AS FOLLOWS :
     |_📂 Patients/
       |_📂 patient1/
        	|_📂 images/
-       	  |_📄 IM0.DCM
-       	  |_📄 IM1.DCM
-       	  |_📄 ...
+       	  |_📂 study0/
+       	    |_📂 series0/
+       	      |_📄 CT0.DCM
+       	      |_📄 CT1.DCM
+       	      |_📄 ...
+       	    |_📂 series1/
+       	      |_📄 PT0.DCM
+       	      |_📄 PT1.DCM
+       	      |_📄 ...
+       	    |_📂 series ...
+       	  |_📂 study ...
        	|_📂 segmentations/
        	  |_📄 seg1.nrrd
        	  |_📄 seg2.nii
-       	  |_📄 ...
-      |_📂 patient2/
-       	|_📂 images/
-       	  |_📄 IM0.DCM
-       	  |_📄 ...
-       	|_📂 segmentations/
-       	  |_📄 seg1.nrrd
        	  |_📄 ...
       |_📂 ...
   |_📄 create_dicom_seg_files.py
@@ -79,14 +80,18 @@ IF THE PROJECT FOLDER IS STRUCTURED AS FOLLOWS, THE structure_patients_folder.py
     |_📄 metadata.json
     |_📂 Patients/
       |_📂 patient1/
-       	|_📄 IM0.DCM
-       	|_📄 IM1.DCM
-       	|_📄 ...
-      |_📂 patient2/
-        |_📄 IM0.DCM
-       	|_📄 IM1.DCM
-       	|_📄 ...
-      |_📂 ...
+       	|_📂 study0/
+       	  |_📂 series0/
+       	    |_📄 CT0.DCM
+       	    |_📄 CT1.DCM
+            |_📄 ...
+     	  |_📂 series1/
+       	    |_📄 PT0.DCM
+       	    |_📄 PT1.DCM
+       	    |_📄 ...
+          |_📂 series ...
+     	|_📂 study ...
+      |_📂 patient ...
     |_📂 Segmentations/
       |_📄 Patient1_CT.seg.nrrd
       |_📄 Patient1_PET.nrrd
@@ -176,10 +181,6 @@ if __name__ == "__main__":
     )
 
 ```
-
-### TODO
-
-- [ ] Add a default parameter named `enable_association_of_several_images_to_the_same_segmentation : bool = False` to the function `write`of the class `DicomWriter`. 
 
 ## Contact
 

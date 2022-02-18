@@ -254,6 +254,7 @@ class DicomSEGWriter:
             self,
             resample_segmentation_to_source_image_size: bool = False,
             delete_itk_segmentation_files: bool = False,
+            enable_multi_images_association: bool = False,
             **kwargs
     ):
         """
@@ -265,6 +266,8 @@ class DicomSEGWriter:
             Whether or not to resample mask to source image size.
         delete_itk_segmentation_files : bool
             Delete itk segmentation files after the DICOM-SEG segmentation files are created. USE WITH CAUTION!
+        enable_multi_images_association : bool
+            Enable association of several images to the same segmentation.
         kwargs : dict
             inplane_cropping : bool, default = False
             skip_empty_slices : bool, default = False
@@ -278,22 +281,38 @@ class DicomSEGWriter:
         )
 
         for path_to_seg in self._paths_to_segmentations:
-            source_images = self.get_dicom_series_paths_for_given_segmentation(path_to_seg)
-            segmentation = self.get_sitk_label_map_for_given_segmentation(path_to_seg)
+            process_complete = False
+            while not process_complete:
+                source_images = self.get_dicom_series_paths_for_given_segmentation(path_to_seg)
+                segmentation = self.get_sitk_label_map_for_given_segmentation(path_to_seg)
 
-            if resample_segmentation_to_source_image_size:
-                image = self.__get_3d_sitk_image_from_dicom_series(paths_to_dicoms_from_series=source_images)
-                segmentation = self._resample_mask(mask=segmentation, image=image)
+                if resample_segmentation_to_source_image_size:
+                    image = self.__get_3d_sitk_image_from_dicom_series(paths_to_dicoms_from_series=source_images)
+                    segmentation = self._resample_mask(mask=segmentation, image=image)
 
-            dcm = writer.write(segmentation, source_images)
+                dcm = writer.write(segmentation, source_images)
 
-            dcm.SOPInstanceUID = generate_uid()
-            dcm.SeriesInstanceUID = generate_uid()
+                dcm.SOPInstanceUID = generate_uid()
+                dcm.SeriesInstanceUID = generate_uid()
 
-            new_path = f"{os.path.join(self._path_to_segmentations_folder, pathlib.Path(path_to_seg).stem)}.SEG.dcm"
-            dcm.save_as(new_path)
+                new_path = f"{os.path.join(self._path_to_segmentations_folder, pathlib.Path(path_to_seg).stem)}.SEG.dcm"
+                dcm.save_as(new_path)
 
-            if delete_itk_segmentation_files:
-                os.remove(path_to_seg)
+                if delete_itk_segmentation_files:
+                    os.remove(path_to_seg)
 
-            print(f"DICOM SEG file saved with path {new_path}.\n")
+                print(f"DICOM SEG file saved with path {new_path}.\n")
+
+                if enable_multi_images_association:
+                    while True:
+                        answer = input(
+                            "Do you want to choose an additional source image for this segmentation? (y/n)"
+                        )
+
+                        if answer == "y" or answer == "n":
+                            process_complete = answer.lower() in ["n"]
+                            break
+                        else:
+                            print("Try again. Make sure to choose between 'y' or 'n'.")
+                else:
+                    process_complete = True
