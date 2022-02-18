@@ -250,6 +250,21 @@ class DicomSEGWriter:
 
         return resampled_mask
 
+    @staticmethod
+    def is_segmentation_association_process_complete():
+        while True:
+            answer = input(
+                "Do you want to choose an additional source image for this segmentation? (y/n)"
+            )
+
+            if answer == "y" or answer == "n":
+                process_complete = answer.lower() in ["n"]
+                break
+            else:
+                print("Try again. Make sure to choose between 'y' or 'n'.")
+                
+        return process_complete
+
     def write(
             self,
             resample_segmentation_to_source_image_size: bool = False,
@@ -304,15 +319,6 @@ class DicomSEGWriter:
                 print(f"DICOM SEG file saved with path {new_path}.\n")
 
                 if enable_multi_images_association:
-                    while True:
-                        answer = input(
-                            "Do you want to choose an additional source image for this segmentation? (y/n)"
-                        )
-
-                        if answer == "y" or answer == "n":
-                            process_complete = answer.lower() in ["n"]
-                            break
-                        else:
-                            print("Try again. Make sure to choose between 'y' or 'n'.")
+                    process_complete = self.is_segmentation_association_process_complete()
                 else:
                     process_complete = True
