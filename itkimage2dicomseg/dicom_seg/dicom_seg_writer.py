@@ -252,6 +252,14 @@ class DicomSEGWriter:
 
     @staticmethod
     def is_segmentation_association_process_complete():
+        """
+        Ask the user if all the source images of the current segmentation have been associated.
+
+        Returns
+        -------
+        process_complete : bool
+            Process complete.
+        """
         while True:
             answer = input(
                 "Do you want to choose an additional source image for this segmentation? (y/n)"
@@ -262,7 +270,7 @@ class DicomSEGWriter:
                 break
             else:
                 print("Try again. Make sure to choose between 'y' or 'n'.")
-                
+
         return process_complete
 
     def write(
