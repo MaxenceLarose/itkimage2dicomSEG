@@ -321,12 +321,12 @@ class DicomSEGWriter:
                 new_path = f"{os.path.join(self._path_to_segmentations_folder, pathlib.Path(path_to_seg).stem)}.SEG.dcm"
                 dcm.save_as(new_path)
 
-                if delete_itk_segmentation_files:
-                    os.remove(path_to_seg)
-
                 print(f"DICOM SEG file saved with path {new_path}.\n")
 
                 if enable_multi_images_association:
                     process_complete = self.is_segmentation_association_process_complete()
                 else:
                     process_complete = True
+                
+                if delete_itk_segmentation_files and process_complete:
+                    os.remove(path_to_seg)

@@ -177,6 +177,10 @@ if __name__ == "__main__":
 
 ```
 
+## TODO
+
+- [ ] Replace all features that depends on the patient's name with features that depends on its ID.
+
 ## Contact
 
 Maxence Larose, B. Ing., [maxence.larose.1@ulaval.ca](mailto:maxence.larose.1@ulaval.ca)
