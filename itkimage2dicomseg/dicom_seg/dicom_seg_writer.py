@@ -305,6 +305,7 @@ class DicomSEGWriter:
 
         for path_to_seg in self._paths_to_segmentations:
             process_complete = False
+            i = 0
             while not process_complete:
                 source_images = self.get_dicom_series_paths_for_given_segmentation(path_to_seg)
                 segmentation = self.get_sitk_label_map_for_given_segmentation(path_to_seg)
@@ -318,15 +319,17 @@ class DicomSEGWriter:
                 dcm.SOPInstanceUID = generate_uid()
                 dcm.SeriesInstanceUID = generate_uid()
 
-                new_path = f"{os.path.join(self._path_to_segmentations_folder, pathlib.Path(path_to_seg).stem)}.SEG.dcm"
+                new_path = f"{os.path.join(self._path_to_segmentations_folder, pathlib.Path(path_to_seg).stem)}_" \
+                           f"{i}.SEG.dcm"
                 dcm.save_as(new_path)
 
                 print(f"DICOM SEG file saved with path {new_path}.\n")
 
                 if enable_multi_images_association:
                     process_complete = self.is_segmentation_association_process_complete()
+                    i += 1
                 else:
                     process_complete = True
-                
+
                 if delete_itk_segmentation_files and process_complete:
                     os.remove(path_to_seg)
