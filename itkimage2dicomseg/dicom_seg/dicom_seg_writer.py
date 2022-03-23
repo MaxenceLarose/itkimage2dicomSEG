@@ -3,7 +3,7 @@
     @Author:            Maxence Larose
 
     @Creation Date:     01/2022
-    @Last modification: 01/2022
+    @Last modification: 03/2022
 
     @Description:       This file contains the DicomSEGWriter which is to create DICOM SEG files from segmentations
                         files in the research data file formats (such as NRRD, NIfTI, etc.).
@@ -99,14 +99,14 @@ class DicomSEGWriter:
             List of the data from the selected series.
         """
         series_data_list: List[DicomSEGWriter.SeriesData] = []
-        all_patient_names: Set[str] = set()
+        all_patient_uids: Set[str] = set()
         for idx, series_id in enumerate(self.__series_ids):
             series_reader = sitk.ImageSeriesReader()
             paths_to_dicoms_from_series = series_reader.GetGDCMSeriesFileNames(self._path_to_dicom_folder, series_id)
 
             path_to_first_dicom_of_series = paths_to_dicoms_from_series[0]
             loaded_dicom_header = get_dicom_header(path_to_dicom=path_to_first_dicom_of_series)
-            all_patient_names.add(loaded_dicom_header.PatientName)
+            all_patient_uids.add(loaded_dicom_header.PatientID)
 
             series_data = self.SeriesData(
                 series_description=loaded_dicom_header.SeriesDescription,
@@ -115,10 +115,10 @@ class DicomSEGWriter:
             )
             series_data_list.append(series_data)
 
-        if len(all_patient_names) != 1:
+        if len(all_patient_uids) != 1:
             raise AssertionError(f"All dicom files in the same folder must belong to the same patient. This is not the "
-                                 f"case for the patient whose data is currently being downloaded since the names "
-                                 f"{all_patient_names} are found in his or her folder.")
+                                 f"case for the patient whose data is currently being downloaded since the uids "
+                                 f"{all_patient_uids} are found in his or her folder.")
 
         return series_data_list
 
@@ -137,15 +137,15 @@ class DicomSEGWriter:
     @staticmethod
     def _display_series_list(series_data_list: List[SeriesData]) -> None:
         """
-        Print the patient's name and its series descriptions (and index).
+        Print the patient's UID and its series descriptions (and index).
         """
-        print(f"{'-'*50}\nPatient name : {series_data_list[0].dicom_header.PatientName}")
+        print(f"{'-'*50}\nPatient ID : {series_data_list[0].dicom_header.PatientID}")
         for series_idx, series_data in enumerate(series_data_list):
             print(f"Series index: {series_idx}, Series Description: {series_data.series_description}")
 
     def get_dicom_series_paths_for_given_segmentation(self, path_to_segmentation: str) -> List[str]:
         """
-        Print the patient's name and its series descriptions (and index).
+        Print the patient's UID and its series descriptions (and index).
 
         Parameters
         ----------
@@ -161,6 +161,7 @@ class DicomSEGWriter:
         series_data_list = self.__series_data_list
 
         self._display_series_list(series_data_list=series_data_list)
+        chosen_series = None
         while True:
             try:
                 series_idx = input(f"Which of the above series contains the source images for the segmentation named "

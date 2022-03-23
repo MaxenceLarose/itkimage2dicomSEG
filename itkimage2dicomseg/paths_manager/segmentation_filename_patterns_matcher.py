@@ -3,7 +3,7 @@
     @Author:            Maxence Larose
 
     @Creation Date:     01/2022
-    @Last modification: 01/2022
+    @Last modification: 03/2022
 
     @Description:       This file contains the SegmentationFilenamePatternsMatcher class whose main purpose is to obtain
                         a list of absolute paths to the segmentation files given the location of the folder containing
@@ -19,8 +19,7 @@ import numpy as np
 class SegmentationFilenamePatternsMatcher:
     """
     A class whose main purpose is to obtain a list of absolute paths to the segmentation files given the location of the
-    folder containing all the segmentations, the patient name and the patient number prefix used in the name of
-    segmentations file.
+    folder containing all the segmentations and the patient ID.
     """
 
     def __init__(
@@ -59,7 +58,7 @@ class SegmentationFilenamePatternsMatcher:
             patient_id: str
     ) -> None:
         """
-        Set patient name.
+        Set patient ID.
 
         Parameters
         ----------
@@ -111,13 +110,12 @@ class SegmentationFilenamePatternsMatcher:
             self,
     ) -> List[str]:
         """
-        Get the absolute paths of the segmentation files whose filenames match the pattern of the given patient name.
+        Get the absolute paths of the segmentation files whose filenames match contains the given patient ID.
 
         Returns
         -------
         absolute_paths_to_segmentation : List[str]
-            A list of the absolute paths to all the segmentation files whose filenames match the pattern of the given
-            patient name.
+            A list of the absolute paths to all the segmentation files whose filenames contains the given patient ID.
         """
         paths_to_segmentation_file = [self.paths_to_segmentation_files[i] for i in np.where(self.matches)[0]]
 
