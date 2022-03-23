@@ -33,7 +33,7 @@ class DicomSEGWriter:
 
     def __init__(
             self,
-            path_to_dicom_folder: str,
+            path_to_images_folder: str,
             path_to_segmentations_folder: str,
             path_to_metadata_json: str
     ):
@@ -42,7 +42,7 @@ class DicomSEGWriter:
 
         Parameters
         ----------
-        path_to_dicom_folder : str
+        path_to_images_folder : str
             Path to the folder containing the patient dicom files.
         path_to_segmentations_folder : str
             Path to the folder containing the patient segmentation files in the research data file formats (such as
@@ -51,7 +51,7 @@ class DicomSEGWriter:
             In order to do the conversion, we need to pass extra metadata that describe the segmentations to the
             converter. See https://qiicr.gitbook.io/dcmqi-guide/use-cases/freesurfer.
         """
-        self.path_to_dicom_folder = path_to_dicom_folder
+        self.path_to_images_folder = path_to_images_folder
         self.path_to_segmentations_folder = path_to_segmentations_folder
         self.path_to_metadata_json = path_to_metadata_json
 
@@ -83,10 +83,10 @@ class DicomSEGWriter:
             All series IDs contained in a patient folder.
         """
         series_reader = sitk.ImageSeriesReader()
-        series_ids = series_reader.GetGDCMSeriesIDs(self.path_to_dicom_folder)
+        series_ids = series_reader.GetGDCMSeriesIDs(self.path_to_images_folder)
 
         if not series_ids:
-            raise FileNotFoundError(f"Given directory {self.path_to_dicom_folder} does not contain a DICOM series.")
+            raise FileNotFoundError(f"Given directory {self.path_to_images_folder} does not contain a DICOM series.")
 
         return series_ids
 
@@ -103,7 +103,7 @@ class DicomSEGWriter:
         all_patient_uids: Set[str] = set()
         for idx, series_id in enumerate(self.__get_series_ids()):
             series_reader = sitk.ImageSeriesReader()
-            paths_to_dicoms_from_series = series_reader.GetGDCMSeriesFileNames(self.path_to_dicom_folder, series_id)
+            paths_to_dicoms_from_series = series_reader.GetGDCMSeriesFileNames(self.path_to_images_folder, series_id)
 
             path_to_first_dicom_of_series = paths_to_dicoms_from_series[0]
             loaded_dicom_header = get_dicom_header(path_to_dicom=path_to_first_dicom_of_series)

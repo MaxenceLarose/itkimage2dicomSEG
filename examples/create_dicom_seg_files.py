@@ -21,7 +21,7 @@ if __name__ == "__main__":
         path_to_patient_folder = os.path.join(PathName.PATH_TO_PATIENTS_FOLDER, patient_folder)
 
         dicom_writer = DicomSEGWriter(
-            path_to_dicom_folder=os.path.join(path_to_patient_folder, FolderName.PATIENT_IMAGES_FOLDER),
+            path_to_images_folder=os.path.join(path_to_patient_folder, FolderName.PATIENT_IMAGES_FOLDER),
             path_to_segmentations_folder=os.path.join(path_to_patient_folder, FolderName.PATIENT_SEGMENTATIONS_FOLDER),
             path_to_metadata_json=PathName.PATH_TO_METADATA_JSON
         )
