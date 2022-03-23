@@ -3,7 +3,7 @@
     @Author:            Maxence Larose
 
     @Creation Date:     01/2022
-    @Last modification: 01/2022
+    @Last modification: 03/2022
 
     @Description:       This file contains the PathGenerator class. This class is used to iterate on multiple patients'
                         path to dicom folder to obtain all patients' Path objects. The PathGenerator class inherits from
@@ -11,7 +11,6 @@
 """
 
 from collections.abc import Generator
-import logging
 import os
 
 from .path import Path
@@ -27,7 +26,7 @@ class PathGenerator(Generator):
             self,
             path_to_patients_folder: str,
             path_to_segmentations_folder: str,
-            verbose: bool
+            verbose: bool = False
     ):
         """
         Used to initialize the self.paths_to_patients_dicom_folder attribute.
@@ -39,7 +38,7 @@ class PathGenerator(Generator):
         path_to_segmentations_folder : str
             Images folder name.
         verbose : bool
-            True to log/print some information else False.
+            True to log/print some information else False. (default = False)
         """
         paths_to_patients_dicom_folder = []
         for path_to_patient_folder in os.listdir(path_to_patients_folder):
@@ -75,10 +74,10 @@ class PathGenerator(Generator):
         """
         if self.current_index == 0:
             if self._verbose:
-                logging.info("\nAssociating patient records with their corresponding image segmentation files...")
+                print("\nAssociating patient records with their corresponding image segmentation files...")
         elif self.current_index == self.__len__():
             if self._verbose:
-                logging.info("Done.")
+                print("Done.")
             self.throw()
 
         path_to_dicom_folder = self._paths_to_patients_dicom_folder[self.current_index]

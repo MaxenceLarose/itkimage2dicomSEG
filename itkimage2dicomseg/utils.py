@@ -8,8 +8,6 @@
     @Description:       A collection of functions and classes that may or may not be useful.
 """
 
-import logging
-
 import pydicom
 
 
@@ -35,6 +33,6 @@ def get_dicom_header(
     loaded_dicom = pydicom.dcmread(path_to_dicom, stop_before_pixels=True)
 
     if show:
-        logging.info(loaded_dicom)
+        print(loaded_dicom)
 
     return loaded_dicom

@@ -107,14 +107,9 @@ Here, there is **1 rule** to follow when naming segmentation files. In fact, a s
 Here, we show the code available in the `structure_data_folder.py` script, which is used to structure the data folder in order to separate the patient images and segmentations in two different folders.
 
 ```python
-import logging
-
 from itkimage2dicomseg import structure_patients_folder, PathGenerator
-from itkimage2dicomseg.logging_tools import logs_file_setup
 
 if __name__ == "__main__":
-    logs_file_setup(logging.INFO)
-
     path_generator = PathGenerator(
         path_to_patients_folder="data/Patients",
         path_to_segmentations_folder="data/Segmentations",
@@ -126,7 +121,6 @@ if __name__ == "__main__":
         patient_images_folder_name="images",
         patient_segmentations_folder_name="segmentations"
     )
-
 ```
 
 #### Step 2 : Create DICOM SEG files
@@ -134,15 +128,11 @@ if __name__ == "__main__":
 Here, we show the code available in the `create_dicom_seg_files.py` script, which is used to create DICOM SEG files from segmentations files in the research data file formats (such as NRRD, NIfTI, etc.).
 
 ```python
-import logging
 import os
 
 from itkimage2dicomseg import DicomSEGWriter
-from itkimage2dicomseg.logging_tools import logs_file_setup
 
 if __name__ == "__main__":
-    logs_file_setup(logging.INFO)
-
     for patient_folder in os.listdir("data/Patients"):
         path_to_patient_folder = os.path.join("data/Patients", patient_folder)
 
@@ -152,8 +142,7 @@ if __name__ == "__main__":
             path_to_metadata_json="data/metadata.json"
         )
 
-        dicom_writer.write(delete_itk_segmentation_files=False) # You might want to set the variable delete_itk_segmentation_files to True if you want to delete the segmentations.
-
+        dicom_writer.write(delete_itk_segmentation_files=False) # You might want to set the variable delete_itk_segmentation_files to True.
 ```
 
 #### Step 3 : Destructure your data folder (Optional)
@@ -161,20 +150,14 @@ if __name__ == "__main__":
 Here, we show the code available in the `destructure_data_folder.py` script, which is used to rearrange the data folder structure so that a patient folder contains all of his DICOM files, including the newly created DICOM SEG files.
 
 ```python
-import logging
-
 from itkimage2dicomseg import destructure_patients_folder
-from itkimage2dicomseg.logging_tools import logs_file_setup
 
 if __name__ == "__main__":
-    logs_file_setup(logging.INFO)
-
     destructure_patients_folder(
         path_to_patients_folder="data/Patients",
         patient_images_folder_name="images",
         patient_segmentations_folder_name="segmentations"
     )
-
 ```
 
 ## TODO

@@ -3,12 +3,11 @@
     @Author:            Maxence Larose
 
     @Creation Date:     01/2022
-    @Last modification: 01/2022
+    @Last modification: 03/2022
 
     @Description:       This file contains the Path class.
 """
 
-import logging
 import os
 from typing import Optional, List
 
@@ -82,7 +81,7 @@ class Path:
         patient_id = str(dicom_header.PatientID)
 
         if self._verbose:
-            logging.info(patient_id)
+            print(patient_id)
 
         segmentation_filename_patterns_matcher = SegmentationFilenamePatternsMatcher(
             path_to_segmentations_folder=self._path_to_segmentations_folder,
