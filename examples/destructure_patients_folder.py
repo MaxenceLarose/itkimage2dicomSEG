@@ -8,9 +8,12 @@
     @Description:       Rearrange the data folder structure so that a patient folder contains all of his DICOM files,
                         including the newly created DICOM SEG files.
 """
+import env_examples  # Modifies path, DO NOT REMOVE
 
-from .patients_folder_structure.destructure import destructure_patients_folder
-from .settings import *
+from itkimage2dicomseg import destructure_patients_folder
+
+from settings import *
+
 
 if __name__ == "__main__":
     destructure_patients_folder(

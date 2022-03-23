@@ -8,11 +8,13 @@
     @Description:       Create DICOM SEG files from segmentations files in the research data file formats (such as NRRD,
                         NIfTI, etc.).
 """
-
+import env_examples  # Modifies path, DO NOT REMOVE
 import os
 
-from .settings import *
-from .dicom_seg.dicom_seg_writer import DicomSEGWriter
+from itkimage2dicomseg import DicomSEGWriter
+
+from settings import *
+
 
 if __name__ == "__main__":
     for patient_folder in os.listdir(PathName.PATH_TO_PATIENTS_FOLDER):

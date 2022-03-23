@@ -9,10 +9,11 @@
                         in order to separate the patient images and segmentations (in research file formats) in two
                         different folders.
 """
+import env_examples  # Modifies path, DO NOT REMOVE
 
-from .patients_folder_structure.structure import structure_patients_folder
-from .paths_manager.path_generator import PathGenerator
-from .settings import *
+from itkimage2dicomseg import PathGenerator, structure_patients_folder
+
+from settings import *
 
 
 if __name__ == "__main__":

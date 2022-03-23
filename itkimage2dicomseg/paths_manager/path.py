@@ -81,7 +81,7 @@ class Path:
         patient_id = str(dicom_header.PatientID)
 
         if self._verbose:
-            print(patient_id)
+            print(f"Patient ID: {patient_id}")
 
         segmentation_filename_patterns_matcher = SegmentationFilenamePatternsMatcher(
             path_to_segmentations_folder=self._path_to_segmentations_folder,
