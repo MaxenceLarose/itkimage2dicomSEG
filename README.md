@@ -39,68 +39,81 @@ All documentation regarding the creation of such a file is available in the [use
 It is important to configure the directory structure correctly to ensure that the module interacts correctly with the data files. The repository, particularly the `Patients` folder, must be structured as follows :
 
 ```
-# CATEGORY 1 (ImagesFolderStructure = "All In One", SEGMENTATIONS = "In Each Patient Folder") - This is the structure we need!
-|_📂 Patients/
-  |_📂 patient1/
-    |_📂 images/
-      |_📄 IM0.DCM
-      |_📄 IM1.DCM
-      |_📄 ...
-    |_📂 segmentations/
-      |_📄 CT_seg.nrrd
-      |_📄 PET_seg.nii
-      |_📄 ...
-  |_📂 patient2/
-    |_📂 images/
-      |_📄 IM0.DCM
-      |_📄 ...
-    |_📂 segmentations/
-      |_📄 CT.nrrd
-      |_📄 ...
-  |_📂 ...
+CATEGORY 1
+----------
+- This is the structure we need!
+- ImagesFolderStructure = "All In One"
+- SegmentationFilesLocation = "In Each Patient Folder"
+- Structure diagram :
+    |_📂 Patients/
+      |_📂 patient1/
+        |_📂 images/
+          |_📄 IM0.DCM
+          |_📄 IM1.DCM
+          |_📄 ...
+        |_📂 segmentations/
+          |_📄 CT_seg.nrrd
+          |_📄 PET_seg.nii
+          |_📄 ...
+      |_📂 patient2/
+        |_📂 images/
+          |_📄 IM0.DCM
+          |_📄 ...
+        |_📂 segmentations/
+          |_📄 CT.nrrd
+          |_📄 ...
+      |_📂 ...
 ```
 
 If your `Patients` folder is not currently structured as presented above, don't worry. The `FolderStructurer` can automatically transform your folder structure into the prescribed one IF your current structure falls into one of the two categories below.
 
 ```
-# CATEGORY 2 (IMAGES = "All In One", SEGMENTATIONS = "All In One Folder")
-|_📂 Patients/
-  |_📂 patient1/
-    |_📄 IM0.DCM
-    |_📄 IM1.DCM
-    |_📄 ...
-  |_📂 patient2/
-    |_📄 IM0.DCM
-    |_📄 IM1.DCM
-    |_📄 ...
-  |_📂 ...
-|_📂 Segmentations/
-  |_📄 Patient1_CT.seg.nrrd
-  |_📄 Patient1_PET.nrrd
-  |_📄 Patient2_CT.nrrd
-  |_📄 ...
+CATEGORY 2
+----------
+- ImagesFolderStructure = "All In One"
+- SegmentationFilesLocation = "All In One Folder"
+- Structure diagram :
+    |_📂 Patients/
+      |_📂 patient1/
+        |_📄 IM0.DCM
+        |_📄 IM1.DCM
+        |_📄 ...
+      |_📂 patient2/
+        |_📄 IM0.DCM
+        |_📄 IM1.DCM
+        |_📄 ...
+      |_📂 ...
+    |_📂 Segmentations/
+      |_📄 Patient1_CT.seg.nrrd
+      |_📄 Patient1_PET.nrrd
+      |_📄 Patient2_CT.nrrd
+      |_📄 ...
 ```
 
 ```
-CATEGORY 3 (IMAGES = Patient-Study-Series-Instance Hierarchy, SEGMENTATIONS = "All In One Folder")
-|_📂 Patients/
-  |_📂 patient1/
-    |_📂 images/
-      |_📂 study0/
-        |_📂 series0/
-          |_📄 CT0.dcm
-          |_📄 CT1.dcm
-          |_📄 ...
-        |_📂 series1/
-          |_📄 ...
-  |_📂 patient2/
-    |_📄 ...
-  |_📂 patient.../
-|_📂 Segmentations/
-  |_📄 Patient1_CT.seg.nrrd
-  |_📄 Patient1_PET.nrrd
-  |_📄 Patient2_CT.nrrd
-  |_📄 ...
+CATEGORY 3
+----------
+- ImagesFolderStructure = "Patient-Study-Series-Instance Hierarchy"
+- SegmentationFilesLocation = "All In One Folder"
+- Structure diagram :
+    |_📂 Patients/
+      |_📂 patient1/
+        |_📂 images/
+          |_📂 study0/
+            |_📂 series0/
+              |_📄 CT0.dcm
+              |_📄 CT1.dcm
+              |_📄 ...
+            |_📂 series1/
+              |_📄 ...
+      |_📂 patient2/
+        |_📄 ...
+      |_📂 patient.../
+    |_📂 Segmentations/
+      |_📄 Patient1_CT.seg.nrrd
+      |_📄 Patient1_PET.nrrd
+      |_📄 Patient2_CT.nrrd
+      |_📄 ...
 ```
 
 Here, there is **1 rule** to follow when naming segmentation files. In fact, a strong assumption that is made is that the name of the segmentation files associated with the images of a certain patient contains the ID of that patient. 
@@ -165,7 +178,7 @@ if __name__ == "__main__":
     # ---------------------------------------------------------------------------------------------------- #
     #                        "Destructure" folder to original images folder structure                      #
     # ---------------------------------------------------------------------------------------------------- #
-    # folder_structurer.destructure()
+    folder_structurer.destructure()
 
 ```
 
