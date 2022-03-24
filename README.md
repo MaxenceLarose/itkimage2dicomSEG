@@ -36,104 +36,110 @@ All documentation regarding the creation of such a file is available in the [use
 
 #### Data Structure
 
-It is important to configure the directory structure correctly to ensure that the module interacts correctly with the data files. The repository, particularly the `Patients` folder, must be structured as follows. *The names of the folders and files can and probably will differ, but they must be consistent with your own folders and files names.*
+It is important to configure the directory structure correctly to ensure that the module interacts correctly with the data files. The repository, particularly the `Patients` folder, must be structured as follows :
 
 ```
-THE PROJECT FOLDER NEEDS TO BE STRUCTURED AS FOLLOWS :
-|_📂 Project directory/
-  |_📂 data/
-    |_📄 metadata.json
-    |_📂 Patients/
-      |_📂 patient1/
-       	|_📂 images/
-       	  |_📄 IM0.DCM
-       	  |_📄 IM1.DCM
-       	  |_📄 ...
-       	|_📂 segmentations/
-       	  |_📄 seg1.nrrd
-       	  |_📄 seg2.nii
-       	  |_📄 ...
-      |_📂 patient2/
-       	|_📂 images/
-       	  |_📄 IM0.DCM
-       	  |_📄 ...
-       	|_📂 segmentations/
-       	  |_📄 seg1.nrrd
-       	  |_📄 ...
-      |_📂 ...
-  |_📄 create_dicom_seg_files.py
-  |_📄 structure_data_folder.py
-  |_📄 destructure_data_folder.py
-```
-
-If your `Patients` folder is currently structured as presented above, you can skip the [Structure your patients directory](#structure-your-patients-directory-optional) section below and go directly to [Use the code](#use-the-code) section. 
-
-##### Structure your patients directory (Optional)
-
-This module provides a way to structure you data directory as presented above, but this part of the code is not very flexible. In fact, the `structure_patients_folder.py` script will only work if your data directory structure is as follows. *Again, the names of the folders and files can and probably will differ, but they must be consistent with your own folders and files names.*
-
-```
-IF THE PROJECT FOLDER IS STRUCTURED AS FOLLOWS, THE structure_patients_folder.py SCRIPT CAN BE USED TO REARRANGE THE FOLDER STRUCTURE.
-|_📂 Project directory/
-  |_📂 data/
-    |_📄 metadata.json
-    |_📂 Patients/
-      |_📂 patient1/
-       	|_📄 IM0.DCM
-       	|_📄 IM1.DCM
-       	|_📄 ...
-      |_📂 patient2/
-        |_📄 IM0.DCM
-       	|_📄 IM1.DCM
-       	|_📄 ...
-      |_📂 ...
-    |_📂 Segmentations/
-      |_📄 Patient1_CT.seg.nrrd
-      |_📄 Patient1_PET.nrrd
-      |_📄 Patient2_CT.nrrd
-      |_📄 Patient3_US.nrrd
+# CATEGORY 1 (ImagesFolderStructure = "All In One", SEGMENTATIONS = "In Each Patient Folder") - This is the structure we need!
+|_📂 Patients/
+  |_📂 patient1/
+    |_📂 images/
+      |_📄 IM0.DCM
+      |_📄 IM1.DCM
       |_📄 ...
-  |_📄 create_dicom_seg_files.py
-  |_📄 data_structure_preprocessing.py
+    |_📂 segmentations/
+      |_📄 CT_seg.nrrd
+      |_📄 PET_seg.nii
+      |_📄 ...
+  |_📂 patient2/
+    |_📂 images/
+      |_📄 IM0.DCM
+      |_📄 ...
+    |_📂 segmentations/
+      |_📄 CT.nrrd
+      |_📄 ...
+  |_📂 ...
+```
+
+If your `Patients` folder is not currently structured as presented above, don't worry. The `FolderStructurer` can automatically transform your folder structure into the prescribed one IF your current structure falls into one of the two categories below.
+
+```
+# CATEGORY 2 (IMAGES = "All In One", SEGMENTATIONS = "All In One Folder")
+|_📂 Patients/
+  |_📂 patient1/
+    |_📄 IM0.DCM
+    |_📄 IM1.DCM
+    |_📄 ...
+  |_📂 patient2/
+    |_📄 IM0.DCM
+    |_📄 IM1.DCM
+    |_📄 ...
+  |_📂 ...
+|_📂 Segmentations/
+  |_📄 Patient1_CT.seg.nrrd
+  |_📄 Patient1_PET.nrrd
+  |_📄 Patient2_CT.nrrd
   |_📄 ...
 ```
 
-Here, there is **1 rule** to follow when naming segmentation files. In fact, a strong assumption that is made is that the DICOM data have been previously anonymized. We therefore assume that the name of the segmentation files associated with the images of a certain patient contains the ID of that patient. 
-
-### Use the code
-
-#### Step 1 : Structure your data folder ("Optional"... see [Organize your data](#organize-your-data))
-
-Here, we show the code available in the `structure_data_folder.py` script, which is used to structure the data folder in order to separate the patient images and segmentations in two different folders.
-
-```python
-from itkimage2dicomseg import structure_patients_folder, PathGenerator
-
-if __name__ == "__main__":
-    path_generator = PathGenerator(
-        path_to_patients_folder="data/Patients",
-        path_to_segmentations_folder="data/Segmentations",
-        verbose=True
-    )
-
-    structure_patients_folder(
-        path_generator=path_generator,
-        patient_images_folder_name="images",
-        patient_segmentations_folder_name="segmentations"
-    )
+```
+CATEGORY 3 (IMAGES = Patient-Study-Series-Instance Hierarchy, SEGMENTATIONS = "All In One Folder")
+|_📂 Patients/
+  |_📂 patient1/
+    |_📂 images/
+      |_📂 study0/
+        |_📂 series0/
+          |_📄 CT0.dcm
+          |_📄 CT1.dcm
+          |_📄 ...
+        |_📂 series1/
+          |_📄 ...
+  |_📂 patient2/
+    |_📄 ...
+  |_📂 patient.../
+|_📂 Segmentations/
+  |_📄 Patient1_CT.seg.nrrd
+  |_📄 Patient1_PET.nrrd
+  |_📄 Patient2_CT.nrrd
+  |_📄 ...
 ```
 
-#### Step 2 : Create DICOM SEG files
+Here, there is **1 rule** to follow when naming segmentation files. In fact, a strong assumption that is made is that the name of the segmentation files associated with the images of a certain patient contains the ID of that patient. 
 
-Here, we show the code available in the `create_dicom_seg_files.py` script, which is used to create DICOM SEG files from segmentations files in the research data file formats (such as NRRD, NIfTI, etc.).
+### Use the code - Create DICOM SEG files
+
+Here, we show the code available in the `example.py` script, which is used to create DICOM SEG files from segmentations files in the research data file formats (such as NRRD, NIfTI, etc.).
 
 ```python
 import os
 
 from itkimage2dicomseg import DicomSEGWriter
+from itkimage2dicomseg.patients_folder_structure import (ImagesFolderStructure, SegmentationFilesLocation,
+                                                         FolderStructurer)
+
+from settings import *
+
 
 if __name__ == "__main__":
-    for patient_folder in os.listdir("data/Patients"):
+    # ----------------------------------------------------------------------------------------------------------- #
+    #                                     Initialize folder structurer                                            #
+    # ----------------------------------------------------------------------------------------------------------- #
+    folder_structurer = FolderStructurer(
+        images_structure_category=ImagesFolderStructure.AllInOne,
+        segmentations_structure_category=SegmentationFilesLocation.AllInOne,
+        path_to_patients_folder="data/Patients",
+        patient_images_folder_name="images",
+        patient_segmentations_folder_name="segmentations"
+    )
+
+    # ----------------------------------------------------------------------------------------------------------- #
+    #                                            Structure folder                                                 #
+    # ----------------------------------------------------------------------------------------------------------- #
+    folder_structurer.structure(path_to_segmentations_folder="data/Segmentations")
+
+    # ----------------------------------------------------------------------------------------------------------- #
+    #                                         Create DICOM SEG files                                              #
+    # ----------------------------------------------------------------------------------------------------------- #
+    for patient_folder in os.listdir(PathName.PATH_TO_PATIENTS_FOLDER):
         path_to_patient_folder = os.path.join("data/Patients", patient_folder)
 
         dicom_writer = DicomSEGWriter(
@@ -142,28 +148,18 @@ if __name__ == "__main__":
             path_to_metadata_json="data/metadata.json"
         )
 
-        dicom_writer.write(delete_itk_segmentation_files=False) # You might want to set the variable delete_itk_segmentation_files to True.
+        dicom_writer.write(
+            resample_segmentation_to_source_image_size=True, 
+            delete_itk_segmentation_files=True,
+            enable_multi_images_association=True
+        )
+
+    # ----------------------------------------------------------------------------------------------------------- #
+    #                        "Destructure" folder to original images folder structure                             #
+    # ----------------------------------------------------------------------------------------------------------- #
+    folder_structurer.destructure()
+
 ```
-
-#### Step 3 : Destructure your data folder (Optional)
-
-Here, we show the code available in the `destructure_data_folder.py` script, which is used to rearrange the data folder structure so that a patient folder contains all of his DICOM files, including the newly created DICOM SEG files.
-
-```python
-from itkimage2dicomseg import destructure_patients_folder
-
-if __name__ == "__main__":
-    destructure_patients_folder(
-        path_to_patients_folder="data/Patients",
-        patient_images_folder_name="images",
-        patient_segmentations_folder_name="segmentations"
-    )
-```
-
-## TODO
-
-- [X] Replace all features that depends on the patient's name with features that depends on its ID.
-- [X] Upload each patient's images only once, otherwise its very time-consuming when multi images association is enabled.
 
 ## Contact
 
