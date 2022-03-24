@@ -24,7 +24,7 @@ class ImagesFolderStructure(NamedTuple):
     PatientStudySeriesInstanceHierarchy: str = "Patient-Study-Series-Instance Hierarchy"
 
 
-class SegmentationFilesLocation(NamedTuple):
+class SegmentationsFilesLocation(NamedTuple):
     AllInOneFolder: str = "All In One Folder"
     InEachPatientFolder: str = "In Each Patient Folder"
 
@@ -174,12 +174,12 @@ class FolderStructurer:
         path_to_segmentations_folder : str
             Path to the folder containing the segmentations files of all patients.
         """
-        if self._segmentations_structure_category == SegmentationFilesLocation.InEachPatientFolder:
+        if self._segmentations_structure_category == SegmentationsFilesLocation.InEachPatientFolder:
             if self._images_structure_category == ImagesFolderStructure.AllInOne:
                 pass
             elif self._images_structure_category == ImagesFolderStructure.PatientStudySeriesInstanceHierarchy:
                 raise NotImplementedError
-        elif self._segmentations_structure_category == SegmentationFilesLocation.AllInOneFolder:
+        elif self._segmentations_structure_category == SegmentationsFilesLocation.AllInOneFolder:
             if self._images_structure_category == ImagesFolderStructure.AllInOne:
                 pass
             elif self._images_structure_category == ImagesFolderStructure.PatientStudySeriesInstanceHierarchy:
@@ -208,12 +208,12 @@ class FolderStructurer:
         delete_segmentations : bool
             True to delete segmentations else False.
         """
-        if self._segmentations_structure_category == SegmentationFilesLocation.InEachPatientFolder:
+        if self._segmentations_structure_category == SegmentationsFilesLocation.InEachPatientFolder:
             if self._images_structure_category == ImagesFolderStructure.AllInOne:
                 self._destructure_segmentations(delete_segmentations=delete_segmentations)
             elif self._images_structure_category == ImagesFolderStructure.PatientStudySeriesInstanceHierarchy:
                 raise NotImplementedError
-        elif self._segmentations_structure_category == SegmentationFilesLocation.AllInOneFolder:
+        elif self._segmentations_structure_category == SegmentationsFilesLocation.AllInOneFolder:
             self._destructure_segmentations(delete_segmentations=delete_segmentations)
 
             if self._images_structure_category == ImagesFolderStructure.AllInOne:

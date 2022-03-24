@@ -12,7 +12,7 @@ import env_examples  # Modifies path, DO NOT REMOVE
 import os
 
 from itkimage2dicomseg import DicomSEGWriter
-from itkimage2dicomseg.patients_folder_structure import (ImagesFolderStructure, SegmentationFilesLocation,
+from itkimage2dicomseg.patients_folder_structure import (ImagesFolderStructure, SegmentationsFilesLocation,
                                                          FolderStructurer)
 
 
@@ -32,7 +32,7 @@ if __name__ == "__main__":
     # ---------------------------------------------------------------------------------------------------- #
     folder_structurer = FolderStructurer(
         images_folder_structure=ImagesFolderStructure.AllInOne,
-        segmentations_files_location=SegmentationFilesLocation.AllInOneFolder,
+        segmentations_files_location=SegmentationsFilesLocation.AllInOneFolder,
         path_to_patients_folder=PATH_TO_PATIENTS_FOLDER,
         patient_images_folder_name=PATIENTS_IMAGES_FOLDER_NAME,
         patient_segmentations_folder_name=PATIENTS_SEGMENTATIONS_FOLDER_NAME

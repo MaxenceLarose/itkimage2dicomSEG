@@ -1,1 +1,1 @@
-from .folder_structurer import (ImagesFolderStructure, SegmentationFilesLocation, FolderStructurer)
+from .folder_structurer import (ImagesFolderStructure, SegmentationsFilesLocation, FolderStructurer)
