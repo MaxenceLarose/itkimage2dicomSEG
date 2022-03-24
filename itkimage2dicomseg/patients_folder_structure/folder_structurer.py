@@ -32,8 +32,8 @@ class SegmentationFilesLocation(NamedTuple):
 class FolderStructurer:
     def __init__(
             self,
-            images_structure_category: str,
-            segmentations_structure_category: str,
+            images_folder_structure: str,
+            segmentations_files_location: str,
             path_to_patients_folder: str,
             patient_images_folder_name: str,
             patient_segmentations_folder_name: str
@@ -43,7 +43,13 @@ class FolderStructurer:
 
         Just to make everything clear, we present here the 4 possible structure categories.
 
-        CATEGORY 1 (IMAGES = "All In One", SEGMENTATIONS = "In Each Patient Folder") - This is the structure we need!
+        CATEGORY 1
+        ----------
+        - This is the structure we need!
+        - ImagesFolderStructure = "All In One"
+        - SegmentationFilesLocation = "In Each Patient Folder"
+        - Structure diagram :
+
             |_📂 Patients/
               |_📂 patient1/
                 |_📂 images/
@@ -63,7 +69,12 @@ class FolderStructurer:
                   |_📄 ...
               |_📂 ...
 
-        CATEGORY 2 (IMAGES = "All In One", SEGMENTATIONS = "All In One Folder")
+        CATEGORY 2
+        ----------
+        - ImagesFolderStructure = "All In One"
+        - SegmentationFilesLocation = "All In One Folder"
+        - Structure diagram :
+
             |_📂 Patients/
               |_📂 patient1/
                 |_📄 IM0.DCM
@@ -80,7 +91,12 @@ class FolderStructurer:
               |_📄 Patient2_CT.nrrd
               |_📄 ...
 
-        CATEGORY 3 (IMAGES = Patient-Study-Series-Instance Hierarchy, SEGMENTATIONS = "All In One Folder")
+        CATEGORY 3
+        ----------
+        - ImagesFolderStructure = "Patient-Study-Series-Instance Hierarchy"
+        - SegmentationFilesLocation = "All In One Folder"
+        - Structure diagram :
+
             |_📂 Patients/
               |_📂 patient1/
                 |_📂 images/
@@ -100,7 +116,13 @@ class FolderStructurer:
               |_📄 Patient2_CT.nrrd
               |_📄 ...
 
-        CATEGORY 4 (IMAGES = Patient-Study-Series-Instance Hierarchy, SEGMENTATIONS = "Each Patient Folder")
+        CATEGORY 4
+        ----------
+        - NOT IMPLEMENTED!!!
+        - ImagesFolderStructure = "Patient-Study-Series-Instance Hierarchy"
+        - SegmentationFilesLocation = "In Each Patient Folder"
+        - Structure diagram :
+
             |_📂 Patients/
               |_📂 patient1/
                 |_📂 images/
@@ -121,10 +143,10 @@ class FolderStructurer:
 
         Parameters
         ----------
-        images_structure_category: str
-            Images folder category.
-        segmentations_structure_category: str
-            Segmentations folder category.
+        images_folder_structure: str
+            Images folder structure.
+        segmentations_files_location: str
+            Segmentations files location.
         path_to_patients_folder : str
             Path to the folder containing all patients folder.
         patient_images_folder_name : str
@@ -132,8 +154,8 @@ class FolderStructurer:
         patient_segmentations_folder_name : str
             Name of the folder containing a patient segmentation files.
         """
-        self._images_structure_category = images_structure_category
-        self._segmentations_structure_category = segmentations_structure_category
+        self._images_structure_category = images_folder_structure
+        self._segmentations_structure_category = segmentations_files_location
 
         self._path_to_patients_folder = path_to_patients_folder
         self._patient_images_folder_name = patient_images_folder_name

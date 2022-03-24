@@ -36,7 +36,7 @@ class Path:
         path_to_segmentations_folder : str
             Path to the folder containing the segmentation files.
         verbose : bool
-            True to log/print some information else False.
+            True to print some information else False.
         """
         self._path_to_dicom_folder = path_to_dicom_folder
         self._path_to_segmentations_folder = path_to_segmentations_folder

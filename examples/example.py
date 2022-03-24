@@ -15,36 +15,44 @@ from itkimage2dicomseg import DicomSEGWriter
 from itkimage2dicomseg.patients_folder_structure import (ImagesFolderStructure, SegmentationFilesLocation,
                                                          FolderStructurer)
 
-from settings import *
-
 
 if __name__ == "__main__":
-    # ----------------------------------------------------------------------------------------------------------- #
-    #                                     Initialize folder structurer                                            #
-    # ----------------------------------------------------------------------------------------------------------- #
+    # ---------------------------------------------------------------------------------------------------- #
+    #                                              Constants                                               #
+    # ---------------------------------------------------------------------------------------------------- #
+    PATH_TO_METADATA_JSON_FILE = "data/metadata.json"
+    PATH_TO_PATIENTS_FOLDER = "data/Patients"
+    PATH_TO_SEGMENTATIONS_FOLDER = "data/Segmentations"
+
+    PATIENTS_IMAGES_FOLDER_NAME = "images"
+    PATIENTS_SEGMENTATIONS_FOLDER_NAME = "segmentations"
+
+    # ---------------------------------------------------------------------------------------------------- #
+    #                                     Initialize folder structurer                                     #
+    # ---------------------------------------------------------------------------------------------------- #
     folder_structurer = FolderStructurer(
-        images_structure_category=ImagesFolderStructure.AllInOne,
-        segmentations_structure_category=SegmentationFilesLocation.InEachPatientFolder,
-        path_to_patients_folder=PathName.PATH_TO_PATIENTS_FOLDER,
-        patient_images_folder_name=FolderName.PATIENT_IMAGES_FOLDER,
-        patient_segmentations_folder_name=FolderName.PATIENT_SEGMENTATIONS_FOLDER
+        images_folder_structure=ImagesFolderStructure.AllInOne,
+        segmentations_files_location=SegmentationFilesLocation.AllInOneFolder,
+        path_to_patients_folder=PATH_TO_PATIENTS_FOLDER,
+        patient_images_folder_name=PATIENTS_IMAGES_FOLDER_NAME,
+        patient_segmentations_folder_name=PATIENTS_SEGMENTATIONS_FOLDER_NAME
     )
 
-    # ----------------------------------------------------------------------------------------------------------- #
-    #                                            Structure folder                                                 #
-    # ----------------------------------------------------------------------------------------------------------- #
-    folder_structurer.structure(path_to_segmentations_folder=PathName.PATH_TO_SEGMENTATIONS_FOLDER)
+    # ---------------------------------------------------------------------------------------------------- #
+    #                                            Structure folder                                          #
+    # ---------------------------------------------------------------------------------------------------- #
+    folder_structurer.structure(path_to_segmentations_folder=PATH_TO_SEGMENTATIONS_FOLDER)
 
-    # ----------------------------------------------------------------------------------------------------------- #
-    #                                         Create DICOM SEG files                                              #
-    # ----------------------------------------------------------------------------------------------------------- #
-    for patient_folder in os.listdir(PathName.PATH_TO_PATIENTS_FOLDER):
-        path_to_patient_folder = os.path.join(PathName.PATH_TO_PATIENTS_FOLDER, patient_folder)
+    # ---------------------------------------------------------------------------------------------------- #
+    #                                         Create DICOM SEG files                                       #
+    # ---------------------------------------------------------------------------------------------------- #
+    for patient_folder in os.listdir(PATH_TO_PATIENTS_FOLDER):
+        path_to_patient_folder = os.path.join(PATH_TO_PATIENTS_FOLDER, patient_folder)
 
         dicom_writer = DicomSEGWriter(
-            path_to_images_folder=os.path.join(path_to_patient_folder, FolderName.PATIENT_IMAGES_FOLDER),
-            path_to_segmentations_folder=os.path.join(path_to_patient_folder, FolderName.PATIENT_SEGMENTATIONS_FOLDER),
-            path_to_metadata_json=PathName.PATH_TO_METADATA_JSON
+            path_to_images_folder=os.path.join(path_to_patient_folder, PATIENTS_IMAGES_FOLDER_NAME),
+            path_to_segmentations_folder=os.path.join(path_to_patient_folder, PATIENTS_SEGMENTATIONS_FOLDER_NAME),
+            path_to_metadata_json=PATH_TO_METADATA_JSON_FILE
         )
 
         dicom_writer.write(
@@ -53,7 +61,7 @@ if __name__ == "__main__":
             enable_multi_images_association=True
         )
 
-    # ----------------------------------------------------------------------------------------------------------- #
-    #                        "Destructure" folder to original images folder structure                             #
-    # ----------------------------------------------------------------------------------------------------------- #
+    # ---------------------------------------------------------------------------------------------------- #
+    #                        "Destructure" folder to original images folder structure                      #
+    # ---------------------------------------------------------------------------------------------------- #
     # folder_structurer.destructure()

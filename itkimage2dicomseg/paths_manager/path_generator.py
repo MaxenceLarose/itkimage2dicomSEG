@@ -36,9 +36,9 @@ class PathGenerator(Generator):
         path_to_patients_folder : str
             Patients folder path.
         path_to_segmentations_folder : str
-            Images folder name.
+            Segmentations folder path.
         verbose : bool
-            True to log/print some information else False. (default = False)
+            True to print some information else False. (default = False)
         """
         paths_to_patients_dicom_folder = []
         for path_to_patient_folder in os.listdir(path_to_patients_folder):
@@ -55,7 +55,7 @@ class PathGenerator(Generator):
         Total number of patients.
 
         Returns
-        _______
+        -------
         length: int
             Total number of patients.
         """
