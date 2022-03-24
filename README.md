@@ -175,7 +175,7 @@ if __name__ == "__main__":
         )
 
     # ---------------------------------------------------------------------------------------------------- #
-    #                        "Destructure" folder to original images folder structure                      #
+    #                   "Destructure" folder to original images folder structure (If necessary)            #
     # ---------------------------------------------------------------------------------------------------- #
     folder_structurer.destructure()
 
